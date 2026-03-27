@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Windows XP</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+width:100%; height:100%;
+overflow:hidden;
+font-family:Tahoma,sans-serif;
+font-size:11px;
+-webkit-text-size-adjust:100%;
+}
+
+#desktop-view, #mobile-view {
+display:none;
+position:absolute;
+top:0; left:0; right:0; bottom:0;
+}
+#desktop-view.active { display:block; }
+#mobile-view.active  { display:block; }
+
+#js-fallback {
+display:flex; align-items:center; justify-content:center;
+position:absolute; top:0;left:0;right:0;bottom:0;
+background:#3a6ea5; color:white; font-family:Tahoma,sans-serif;
+font-size:16px; text-align:center; padding:24px;
+}
+#js-fallback.hidden { display:none; }
+
+.xp-btn {
+padding:4px 16px;
+background:linear-gradient(to bottom,#f0f0f0,#d0d0d0);
+border:1px solid #7f9db9; border-radius:2px; cursor:pointer;
+font-family:Tahoma,sans-serif; font-size:11px;
+}
+.xp-btn:active { background:linear-gradient(to bottom,#c8d4f0,#b0bcdc); }
+
+.file-grid { display:flex; flex-wrap:wrap; gap:8px; padding:8px; background:white; }
+.file-item {
+display:flex; flex-direction:column; align-items:center;
+width:72px; padding:4px; border-radius:2px; cursor:pointer;
+font-size:11px; text-align:center; word-break:break-word;
+border:1px solid transparent;
+}
+.file-item:hover { background:#ccd9f0; border-color:#316ac5; }
+.file-item .fi { font-size:32px; }
+
+.clippy-btns { display:flex; gap:4px; margin-top:8px; flex-wrap:wrap; }
+.clippy-btn {
+padding:3px 8px;
+background:linear-gradient(to bottom,#f0f0f0,#d0d0d0);
+border:1px solid #aaa; border-radius:2px; cursor:pointer;
+font-size:10px; font-family:Tahoma,sans-serif;
+}
+.clippy-btn:active { background:#c8d4f0; }
+
+@keyframes clippyFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+@keyframes shake { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-5deg)} 75%{transform:rotate(5deg)} }
+.shaking { animation:shake 0.1s infinite; }
+
+#desktop {
+position:absolute; top:0; left:0; right:0; bottom:30px;
+padding:8px;
+background:radial-gradient(ellipse at 50% 40%, #4a90d9 0%, #245b8a 100%);
+}
+.desktop-icon {
+display:flex; flex-direction:column; align-items:center;
+width:72px; margin-bottom:4px; padding:4px; border-radius:2px;
+cursor:pointer; color:white; text-shadow:1px 1px 2px rgba(0,0,0,0.8);
+font-size:11px; text-align:center; border:1px solid transparent;
+}
+.desktop-icon:hover { background:rgba(49,106,197,0.6); border-color:rgba(255,255,255,0.5); }
+.desktop-icon .icon { font-size:32px; margin-bottom:2px; }
+
+#taskbar {
+position:absolute; bottom:0; left:0; right:0; height:30px;
+background:linear-gradient(to bottom,#245eab,#3a7bd5 8%,#2860c8 15%,#1a4f9e);
+display:flex; align-items:center; gap:2px;
+border-top:1px solid #0a2c6b;
+}
+#start-btn {
+height:26px; padding:0 12px 0 8px;
+background:linear-gradient(to bottom,#5cb45c,#3e9f3e 40%,#2e8b2e);
+border:1px solid #1a6b1a; border-radius:0 12px 12px 0;
+color:white; font-weight:bold; font-size:12px; font-family:Tahoma,sans-serif;
+display:flex; align-items:center; gap:4px; cursor:pointer; white-space:nowrap;
+}
+#start-btn:active { filter:brightness(0.9); }
+#taskbar-apps { flex:1; display:flex; align-items:center; gap:2px; padding:0 4px; overflow:hidden; }
+.taskbar-app {
+height:22px; padding:0 6px; border-radius:2px;
+background:linear-gradient(to bottom,#3a5f9f,#2850a0);
+border:1px solid #1a3a7a; color:white; font-size:10px;
+display:flex; align-items:center; gap:3px; cursor:pointer;
+max-width:130px; overflow:hidden; white-space:nowrap; font-family:Tahoma,sans-serif;
+}
+.taskbar-app.active { background:linear-gradient(to bottom,#1a3a7a,#2850a0); box-shadow:inset 1px 1px 2px rgba(0,0,0,0.4); }
+#systray {
+height:26px; padding:0 8px;
+background:linear-gradient(to bottom,#1a4a9e,#2060c8);
+border-left:1px solid #0a2c6b;
+display:flex; align-items:center; gap:6px;
+color:white; font-size:11px; white-space:nowrap;
+}
+
+#start-menu {
+position:absolute; bottom:30px; left:0; width:300px;
+background:white; border:1px solid #0a2c6b; border-radius:4px 4px 0 0;
+box-shadow:2px 2px 8px rgba(0,0,0,0.5);
+display:none; flex-direction:column; z-index:9000;
+}
+#start-menu.open { display:flex; }
+.start-header { background:linear-gradient(to right,#245eab,#3a7bd5); padding:8px 12px; color:white; border-radius:4px 4px 0 0; display:flex; align-items:center; gap:8px; }
+.start-header .avatar { font-size:32px; }
+.start-header .username { font-weight:bold; font-size:13px; }
+.start-body { display:flex; }
+.start-left { flex:1; padding:4px 0; border-right:1px solid #ddd; }
+.start-right { width:130px; background:#e8f0fa; padding:4px 0; }
+.start-item { padding:5px 12px; cursor:pointer; display:flex; align-items:center; gap:8px; font-size:11px; }
+.start-item:hover { background:#316ac5; color:white; }
+.start-item .si-icon { font-size:18px; width:22px; text-align:center; }
+.start-footer { background:#d4e0f0; padding:4px 8px; display:flex; justify-content:flex-end; border-top:1px solid #aac; }
+.start-footer button { padding:3px 10px; background:linear-gradient(to bottom,#f0f0f0,#d0d0d0); border:1px solid #aaa; border-radius:2px; cursor:pointer; font-family:Tahoma,sans-serif; font-size:11px; }
+
+.xp-window {
+position:absolute; display:flex; flex-direction:column;
+min-width:260px; min-height:160px;
+background:#ece9d8; border:1px solid #0054a6;
+border-radius:6px 6px 0 0; box-shadow:2px 2px 10px rgba(0,0,0,0.5);
+}
+.xp-titlebar {
+height:26px; padding:0 4px; flex-shrink:0; cursor:move; border-radius:6px 6px 0 0;
+background:linear-gradient(to bottom,#5a9aff,#245eab 4%,#0f4ea6 50%,#1a5fc0 96%,#5a9aff);
+display:flex; align-items:center; gap:4px;
+}
+.xp-titlebar .win-icon { font-size:14px; }
+.xp-titlebar .win-title { flex:1; color:white; font-weight:bold; font-size:12px; text-shadow:1px 1px 1px rgba(0,0,0,0.5); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+.win-controls { display:flex; gap:2px; flex-shrink:0; }
+.win-btn { width:21px; height:21px; border-radius:3px; border:1px solid rgba(0,0,0,0.3); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold; font-family:Arial; }
+.win-btn-min, .win-btn-max { background:linear-gradient(to bottom,#e8e8e8,#c8c8c8); color:#333; }
+.win-btn-close { background:linear-gradient(to bottom,#f06060,#c03030); color:white; }
+.win-btn-close:hover { background:linear-gradient(to bottom,#ff8080,#e04040); }
+.win-btn:hover:not(.win-btn-close) { background:linear-gradient(to bottom,#fff,#ddd); }
+.xp-menubar { background:#ece9d8; border-bottom:1px solid #aaa; display:flex; padding:0 4px; flex-shrink:0; }
+.xp-menu-item { padding:2px 6px; cursor:pointer; border-radius:2px; font-size:11px; }
+.xp-menu-item:hover { background:#316ac5; color:white; }
+.xp-toolbar { background:linear-gradient(to bottom,#f5f3ec,#dedad0); border-bottom:1px solid #aaa; padding:2px 4px; display:flex; align-items:center; gap:2px; flex-shrink:0; }
+.tb-btn { padding:2px 6px; background:transparent; border:1px solid transparent; border-radius:2px; cursor:pointer; font-size:11px; font-family:Tahoma,sans-serif; }
+.tb-btn:hover { background:#dbe5f8; border-color:#316ac5; }
+.xp-address { background:white; border:1px solid #7f9db9; padding:1px 4px; flex:1; font-size:11px; font-family:Tahoma,sans-serif; height:20px; min-width:0; }
+.xp-content { flex:1; overflow:auto; background:white; -webkit-overflow-scrolling:touch; }
+.xp-statusbar { background:linear-gradient(to bottom,#f5f3ec,#dedad0); border-top:1px solid #aaa; padding:2px 8px; font-size:11px; color:#444; flex-shrink:0; }
+.notepad-area { width:100%; height:100%; border:none; outline:none; resize:none; font-family:‘Lucida Console’,monospace; font-size:14px; padding:4px; display:block; -webkit-appearance:none; border-radius:0; }
+.dialog-body { padding:12px; display:flex; gap:12px; align-items:flex-start; }
+.dialog-icon { font-size:32px; }
+.dialog-text { flex:1; font-size:11px; line-height:1.6; }
+.dialog-footer { padding:8px; display:flex; justify-content:center; gap:8px; border-top:1px solid #aaa; }
+
+#d-clippy { position:absolute; bottom:38px; right:16px; width:70px; cursor:pointer; z-index:8000; animation:clippyFloat 3s ease-in-out infinite; font-size:52px; text-align:center; filter:drop-shadow(2px 2px 4px rgba(0,0,0,0.3)); }
+#d-clippy-bubble {
+display:none; position:absolute; bottom:90px; right:8px; width:200px;
+background:#ffffc0; border:2px solid #888; border-radius:8px; padding:8px;
+font-size:11px; line-height:1.5; box-shadow:2px 2px 6px rgba(0,0,0,0.3);
+font-family:Tahoma,sans-serif; z-index:9999;
+}
+#d-clippy-bubble::after { content:’’; position:absolute; bottom:-10px; right:20px; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid #888; }
+#d-clippy-bubble::before { content:’’; position:absolute; bottom:-8px; right:21px; border-left:7px solid transparent; border-right:7px solid transparent; border-top:9px solid #ffffc0; z-index:1; }
+#d-clippy-bubble.show { display:block; }
+
+#mob-bg {
+position:absolute; top:0; left:0; right:0; bottom:0;
+background:linear-gradient(160deg,#1a4a9e 0%,#3a7bd5 50%,#245eab 100%);
+}
+#mob-topbar {
+position:absolute; top:0; left:0; right:0;
+height:40px; padding-top:env(safe-area-inset-top, 0px);
+background:rgba(0,0,0,0.25);
+display:flex; justify-content:space-between; align-items:center;
+padding-left:16px; padding-right:16px;
+color:white; font-size:13px; z-index:10;
+}
+#mob-grid {
+position:absolute;
+top:40px; left:0; right:0; bottom:60px;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
+display:grid; grid-template-columns:repeat(4,1fr);
+gap:16px; padding:16px; align-content:start;
+}
+.mob-app { display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; padding:6px; border-radius:10px; }
+.mob-app:active { background:rgba(255,255,255,0.2); }
+.mob-app-icon { width:54px; height:54px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:28px; box-shadow:0 3px 8px rgba(0,0,0,0.4); }
+.mob-app-label { color:white; font-size:10px; text-align:center; text-shadow:1px 1px 2px rgba(0,0,0,0.9); line-height:1.2; }
+
+#mob-dock {
+position:absolute; bottom:0; left:0; right:0;
+height:60px; padding-bottom:env(safe-area-inset-bottom, 0px);
+background:rgba(0,20,70,0.88);
+border-top:1px solid rgba(255,255,255,0.12);
+display:flex; justify-content:space-around; align-items:center;
+padding-left:8px; padding-right:8px;
+}
+.mob-dock-btn { display:flex; flex-direction:column; align-items:center; gap:2px; color:white; font-size:10px; cursor:pointer; padding:4px 10px; border-radius:8px; }
+.mob-dock-btn:active { background:rgba(255,255,255,0.2); }
+.mob-dock-btn .di { font-size:24px; }
+
+#mob-sheet {
+position:absolute; left:0; right:0; bottom:0;
+background:#ece9d8;
+border-radius:18px 18px 0 0;
+box-shadow:0 -6px 24px rgba(0,0,0,0.5);
+-webkit-transform:translateY(100%);
+transform:translateY(100%);
+-webkit-transition:-webkit-transform 0.28s cubic-bezier(.4,0,.2,1);
+transition:transform 0.28s cubic-bezier(.4,0,.2,1);
+display:flex; flex-direction:column;
+height:82%;
+z-index:200;
+}
+#mob-sheet.open { -webkit-transform:translateY(0); transform:translateY(0); }
+#mob-sheet-handle { width:44px; height:5px; background:#bbb; border-radius:3px; margin:10px auto 2px; flex-shrink:0; }
+#mob-sheet-header {
+background:linear-gradient(to bottom,#5a9aff,#0f4ea6 50%,#1a5fc0);
+padding:8px 14px; display:flex; align-items:center; gap:8px; flex-shrink:0;
+}
+#mob-sheet-header .sh-icon { font-size:18px; }
+#mob-sheet-header .sh-title { flex:1; color:white; font-weight:bold; font-size:14px; }
+#mob-sheet-header .sh-close { color:white; font-size:22px; cursor:pointer; padding:2px 6px; line-height:1; }
+#mob-sheet-body { flex:1; overflow-y:auto; background:white; -webkit-overflow-scrolling:touch; }
+
+#mob-clippy {
+position:absolute; bottom:68px; right:14px;
+font-size:46px; cursor:pointer; z-index:300;
+animation:clippyFloat 3s ease-in-out infinite;
+filter:drop-shadow(1px 2px 5px rgba(0,0,0,0.5));
+}
+#mob-clippy-bubble {
+display:none; position:absolute; bottom:122px; right:8px; width:186px;
+background:#ffffc0; border:2px solid #888; border-radius:10px; padding:10px;
+font-size:12px; line-height:1.5; box-shadow:2px 2px 8px rgba(0,0,0,0.35);
+font-family:Tahoma,sans-serif; z-index:400;
+}
+#mob-clippy-bubble.show { display:block; }
+#mob-clippy-bubble::after { content:’’; position:absolute; bottom:-10px; right:18px; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid #888; }
+#mob-clippy-bubble::before { content:’’; position:absolute; bottom:-8px; right:19px; border-left:7px solid transparent; border-right:7px solid transparent; border-top:9px solid #ffffc0; z-index:1; }
+</style>
+
+</head>
+<body>
+
+<div id="js-fallback">
+  <div>
+    <div style="font-size:48px;margin-bottom:16px">&#x1FA9F;</div>
+    <div style="font-size:18px;font-weight:bold;margin-bottom:8px">Windows XP is loading...</div>
+    <div style="font-size:13px;opacity:0.8">If this stays, check that JavaScript is enabled.</div>
+  </div>
+</div>
+
+<div id="desktop-view">
+  <div id="desktop">
+    <div class="desktop-icon" ondblclick="d_open('explorer')"><div class="icon">&#x1F4C1;</div>My Documents</div>
+    <div class="desktop-icon" ondblclick="d_open('computer')"><div class="icon">&#x1F4BB;</div>My Computer</div>
+    <div class="desktop-icon" ondblclick="d_open('recycle')"><div class="icon" id="recycle-icon">&#x1F5D1;&#xFE0F;</div>Recycle Bin</div>
+    <div class="desktop-icon" ondblclick="d_open('notepad')"><div class="icon">&#x1F4DD;</div>Notepad</div>
+    <div class="desktop-icon" ondblclick="d_open('ie')"><div class="icon">&#x1F310;</div>Internet Explorer</div>
+    <div class="desktop-icon" ondblclick="d_open('error')"><div class="icon">&#x26A0;&#xFE0F;</div>This PC Has a Virus.exe</div>
+  </div>
+  <div id="windows-container"></div>
+  <div id="d-clippy" onclick="d_clippy_toggle()">&#x1F4CE;</div>
+  <div id="d-clippy-bubble">
+    <div id="d-clippy-text">It looks like you are trying to use a computer. Would you like help?</div>
+    <div class="clippy-btns">
+      <button class="clippy-btn" onclick="d_clippy_say('yes')">Yes</button>
+      <button class="clippy-btn" onclick="d_clippy_say('no')">No</button>
+      <button class="clippy-btn" onclick="d_clippy_say('dismiss')">Go away</button>
+    </div>
+  </div>
+  <div id="start-menu">
+    <div class="start-header"><div class="avatar">&#x1F464;</div><div class="username">User</div></div>
+    <div class="start-body">
+      <div class="start-left">
+        <div class="start-item" onclick="d_open('ie')"><span class="si-icon">&#x1F310;</span>Internet Explorer</div>
+        <div class="start-item" onclick="d_open('notepad')"><span class="si-icon">&#x1F4DD;</span>Notepad</div>
+        <div class="start-item" onclick="d_open('explorer')"><span class="si-icon">&#x1F4C1;</span>My Documents</div>
+        <div class="start-item" onclick="d_open('error')"><span class="si-icon">&#x26A0;&#xFE0F;</span>This PC Has a Virus.exe</div>
+        <hr style="margin:4px 12px;border-color:#ccc">
+        <div class="start-item" onclick="d_clippy_show('start')"><span class="si-icon">&#x1F4CE;</span>Ask Clippy</div>
+      </div>
+      <div class="start-right">
+        <div class="start-item"><span class="si-icon">&#x1F4BB;</span>My Computer</div>
+        <div class="start-item"><span class="si-icon">&#x1F5BC;&#xFE0F;</span>My Pictures</div>
+        <div class="start-item"><span class="si-icon">&#x1F3B5;</span>My Music</div>
+        <div class="start-item"><span class="si-icon">&#x2699;&#xFE0F;</span>Control Panel</div>
+        <div class="start-item"><span class="si-icon">&#x2753;</span>Help &amp; Support</div>
+      </div>
+    </div>
+    <div class="start-footer"><button onclick="d_shutdown()">&#x1F50C; Turn Off Computer</button></div>
+  </div>
+  <div id="taskbar">
+    <button id="start-btn" onclick="d_start_toggle()">&#x1FA9F; <b>start</b></button>
+    <div id="taskbar-apps"></div>
+    <div id="systray">&#x1F50A; &#x1F310; <span id="clock-d"></span></div>
+  </div>
+</div>
+
+<div id="mobile-view">
+  <div id="mob-bg"></div>
+  <div id="mob-topbar">
+    <span id="clock-m">12:00</span>
+    <span>&#x1F50B; &#x1F4F6;</span>
+  </div>
+  <div id="mob-grid">
+    <div class="mob-app" onclick="m_open('explorer')">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#fdcb6e,#e17055)">&#x1F4C1;</div>
+      <div class="mob-app-label">My Documents</div>
+    </div>
+    <div class="mob-app" onclick="m_open('computer')">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#74b9ff,#0984e3)">&#x1F4BB;</div>
+      <div class="mob-app-label">My Computer</div>
+    </div>
+    <div class="mob-app" onclick="m_open('notepad')">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#dfe6e9,#636e72)">&#x1F4DD;</div>
+      <div class="mob-app-label">Notepad</div>
+    </div>
+    <div class="mob-app" onclick="m_open('ie')">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#55efc4,#00b894)">&#x1F310;</div>
+      <div class="mob-app-label">Internet Explorer</div>
+    </div>
+    <div class="mob-app" onclick="m_open('recycle')">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#a29bfe,#6c5ce7)">&#x1F5D1;&#xFE0F;</div>
+      <div class="mob-app-label">Recycle Bin</div>
+    </div>
+    <div class="mob-app" onclick="m_open('msw')">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#fd79a8,#e84393)">&#x1F4A3;</div>
+      <div class="mob-app-label">Minesweeper</div>
+    </div>
+    <div class="mob-app" onclick="m_open('error')">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#ff7675,#d63031)">&#x26A0;&#xFE0F;</div>
+      <div class="mob-app-label">Virus.exe</div>
+    </div>
+    <div class="mob-app" onclick="m_clippy_show()">
+      <div class="mob-app-icon" style="background:linear-gradient(135deg,#ffeaa7,#fdcb6e)">&#x1F4CE;</div>
+      <div class="mob-app-label">Ask Clippy</div>
+    </div>
+  </div>
+  <div id="mob-clippy" onclick="m_clippy_toggle()">&#x1F4CE;</div>
+  <div id="mob-clippy-bubble">
+    <div id="mob-clippy-text">It looks like you are using a phone to pretend it is 2001. Interesting choice.</div>
+    <div class="clippy-btns" style="margin-top:8px">
+      <button class="clippy-btn" onclick="m_clippy_reply('yes')">Yes</button>
+      <button class="clippy-btn" onclick="m_clippy_reply('no')">No</button>
+      <button class="clippy-btn" onclick="m_clippy_hide()">Go away</button>
+    </div>
+  </div>
+  <div id="mob-sheet">
+    <div id="mob-sheet-handle"></div>
+    <div id="mob-sheet-header">
+      <span class="sh-icon" id="mob-sh-icon">&#x1F4C1;</span>
+      <span class="sh-title" id="mob-sh-title">My Documents</span>
+      <span class="sh-close" onclick="m_close()">&#x2715;</span>
+    </div>
+    <div id="mob-sheet-body"></div>
+  </div>
+  <div id="mob-dock">
+    <div class="mob-dock-btn" onclick="m_close()"><div class="di">&#x1F3E0;</div><div>Home</div></div>
+    <div class="mob-dock-btn" onclick="m_open('ie')"><div class="di">&#x1F310;</div><div>IE</div></div>
+    <div class="mob-dock-btn" onclick="m_open('notepad')"><div class="di">&#x1F4DD;</div><div>Notepad</div></div>
+    <div class="mob-dock-btn" onclick="m_clippy_show()"><div class="di">&#x1F4CE;</div><div>Clippy</div></div>
+  </div>
+</div>
+
+<script>
+// Emoji lookup - all defined as unicode escape sequences so copy-paste cannot corrupt them
+var E = {
+  folder: "\uD83D\uDCC1", pc: "\uD83D\uDCBB", trash: "\uD83D\uDDD1\uFE0F",
+  note: "\uD83D\uDCDD", globe: "\uD83D\uDF10", warn: "\u26A0\uFE0F",
+  stop: "\u26D4", clip: "\uD83D\uDCCE", bomb: "\uD83D\uDCA3",
+  doc: "\uD83D\uDCC4", chart: "\uD83D\uDCCA", pic: "\uD83D\uDDBC\uFE0F",
+  music: "\uD83C\uDFB5", disk: "\uD83D\uDCBE", cd: "\uD83D\uDCBF",
+  dvd: "\uD83D\uDCC0", print: "\uD83D\uDDA8\uFE0F", gear: "\u2699\uFE0F",
+  user: "\uD83D\uDC64", plug: "\uD83D\uDD0C", speaker: "\uD83D\uDD0A",
+  party: "\uD83C\uDF89", flag: "\uD83D\uDEA9",
+  smile: "\uD83D\uDE42", cool: "\uD83D\uDE0E", dizzy: "\uD83D\uDE35", happy: "\uD83D\uDE0A"
+};
+
+// Helper: add/remove CSS class without classList.toggle (max compat)
+function addClass(el, c) { if (el && el.className.indexOf(c) === -1) el.className += ' ' + c; }
+function rmClass(el, c) { if (el) el.className = el.className.replace(new RegExp('\\b' + c + '\\b','g'), '').replace(/  +/g,' ').replace(/^ | $/g,''); }
+function hasClass(el, c) { return el && el.className.indexOf(c) !== -1; }
+
+// pad number to 3 digits (no padStart needed)
+function pad3(n) { n = Math.min(n, 999); return (n < 10 ? '00' : n < 100 ? '0' : '') + n; }
+
+// INIT
+var IS_MOBILE = false;
+try {
+  IS_MOBILE = /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    || (window.innerWidth <= 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
+  addClass(document.getElementById(IS_MOBILE ? 'mobile-view' : 'desktop-view'), 'active');
+  addClass(document.getElementById('js-fallback'), 'hidden');
+} catch(err) {
+  document.getElementById('js-fallback').innerHTML = '<div style="padding:24px;color:white">JS Error: ' + err.message + '</div>';
+}
+
+// CLOCK
+(function tick() {
+  try {
+    var s = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    var d = document.getElementById('clock-d');
+    var m = document.getElementById('clock-m');
+    if (d) d.textContent = s;
+    if (m) m.textContent = s;
+  } catch(e) {}
+  setTimeout(tick, 10000);
+})();
+
+// SHARED CONTENT
+function mkFileGrid(items) {
+  var h = '<div class="file-grid">';
+  for (var i = 0; i < items.length; i++) h += '<div class="file-item"><div class="fi">' + items[i][0] + '</div><div>' + items[i][1] + '</div></div>';
+  return h + '</div>';
+}
+
+function buildContent(id) {
+  switch (id) {
+    case 'explorer':
+      return mkFileGrid([[E.doc,'Resume.doc'],[E.chart,'Budget_FINAL.xls'],[E.pic,'vacation_photos'],[E.music,'Linkin Park - Numb.mp3'],[E.doc,'Letter_to_Santa.txt'],[E.folder,'My Stuff'],[E.folder,'Secret Stuff'],[E.disk,'Napster']]);
+    case 'computer':
+      return mkFileGrid([[E.disk,'Floppy (A:)'],[E.cd,'Local Disk (C:)'],[E.dvd,'CD-ROM (D:)'],[E.print,'Printers'],[E.gear,'Control Panel']]);
+    case 'recycle':
+      return '<div style="padding:28px;text-align:center;font-family:Tahoma,sans-serif"><div style="font-size:56px">' + E.trash + '</div><p style="margin:10px 0;font-size:13px">The Recycle Bin is empty.</p><button class="xp-btn" style="margin-top:12px" onclick="emptyRecycle()">Empty Recycle Bin</button></div>';
+    case 'notepad':
+      return '<textarea class="notepad-area" style="height:300px" placeholder="Start typing...\n\nIf Clippy shows up, that is not your fault."></textarea>';
+
+```
+case 'ie':
+  return '<div style="padding:16px;text-align:center;font-family:Tahoma,sans-serif"><div style="font-size:52px">' + E.globe + '</div><h2 style="color:#00008b;font-size:17px;margin:8px 0">MSN.com</h2><hr style="border-color:#ccc;margin:8px 0"><ul style="text-align:left;margin:0 0 0 20px;font-size:12px;color:#000066;line-height:2.4"><li>Windows XP Declares Itself Greatest OS Ever</li><li>Kazaa Downloads Up 400%</li><li>AIM Away Messages: An Art Form</li><li>YOUR COMPUTER MAY BE AT RISK \u2014 Click here!!</li><li>' + E.party + ' You are the 1,000,000th visitor!</li></ul><div style="background:#ffff99;border:1px solid #999;padding:8px;font-size:11px;margin-top:12px">' + E.warn + ' 47 popup windows blocked.</div></div>';
+case 'error':
+  return '<div class="dialog-body"><div class="dialog-icon">' + E.stop + '</div><div class="dialog-text"><b>Fatal Error: VIRUS_DETECTED</b><br><br>All your files have been sent to a prince in Nigeria.<br><br><i>Call 1-800-NOTASCAM for immediate support.</i></div></div><div class="dialog-footer"><button class="xp-btn" onclick="m_close();d_close(\'error\')">OK</button><button class="xp-btn" onclick="m_close();d_close(\'error\')">Cancel</button></div>';
+case 'msw':
+  return buildMSW();
+default:
+  return '<div style="padding:16px">Nothing here.</div>';
+```
+
+}
+}
+
+function emptyRecycle() {
+var ic = document.getElementById(‘recycle-icon’);
+if (ic) { addClass(ic, ‘shaking’); setTimeout(function(){ rmClass(ic, ‘shaking’); }, 1200); }
+if (IS_MOBILE) m_clippy_say(“Those files are gone <b>forever</b>. Sleep well.”);
+else d_clippy_show(‘recycle’);
+}
+
+// MINESWEEPER
+var MSW = null, MSW_INTERVAL = null;
+function buildMSW() {
+return ‘<div style="padding:10px;font-family:Tahoma,sans-serif;-webkit-user-select:none;user-select:none"><div style="display:flex;align-items:center;gap:8px;background:#c0c0c0;padding:6px;border:2px inset #888;margin-bottom:8px"><div id="msw-mines" style="background:#000;color:#f00;font-family:monospace;font-size:20px;padding:2px 6px;min-width:40px;text-align:right">010</div><button onclick="mswInit()" style="flex:1;padding:4px;font-size:18px;background:#c0c0c0;border:2px outset #eee;cursor:pointer" id="msw-face">’ + E.smile + ‘</button><div id="msw-time" style="background:#000;color:#f00;font-family:monospace;font-size:20px;padding:2px 6px;min-width:40px">000</div></div><div id="msw-board" style="display:inline-grid;gap:1px;background:#888;border:2px inset #888;touch-action:manipulation"></div><p style="font-size:10px;color:#666;margin-top:8px">Tap = reveal · Hold = flag</p></div>’;
+}
+function mswInit() {
+clearInterval(MSW_INTERVAL);
+var R=9,C=9,M=10, cells=[];
+for (var i=0;i<R*C;i++) cells.push({i:i,mine:false,rev:false,flag:false,adj:0});
+var p=0; while(p<M){var r=Math.floor(Math.random()*R*C);if(!cells[r].mine){cells[r].mine=true;p++;}}
+for(var idx=0;idx<cells.length;idx++){if(cells[idx].mine)continue;var row=Math.floor(idx/C),col=idx%C;for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var nr=row+dr,nc=col+dc;if(nr>=0&&nr<R&&nc>=0&&nc<C&&cells[nr*C+nc].mine)cells[idx].adj++;}}
+MSW={cells:cells,R:R,C:C,M:M,started:false,over:false,won:false,flags:0,secs:0};
+var el; el=document.getElementById(‘msw-time’);if(el)el.textContent=‘000’; el=document.getElementById(‘msw-mines’);if(el)el.textContent=pad3(M); el=document.getElementById(‘msw-face’);if(el)el.textContent=E.smile;
+mswRender();
+}
+function mswRender() {
+if(!MSW)return; var board=document.getElementById(‘msw-board’); if(!board)return;
+board.style.gridTemplateColumns=‘repeat(’+MSW.C+’,1fr)’; board.innerHTML=’’;
+var COLORS=[’’,’#00f’,’#080’,’#f00’,’#008’,’#800’,’#088’,’#000’,’#888’];
+for(var ci=0;ci<MSW.cells.length;ci++){(function(c,i){
+var d=document.createElement(‘div’);
+d.style.cssText=‘width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;cursor:pointer;background:#c0c0c0;border:2px outset #eee;’;
+if(c.rev){d.style.background=’#bbb’;d.style.border=‘1px solid #999’;if(c.mine){d.textContent=E.bomb;d.style.background=’#f44’;}else if(c.adj>0){d.textContent=c.adj;d.style.color=COLORS[c.adj];}}
+else if(c.flag){d.textContent=E.flag;}
+var pt;
+d.addEventListener(‘pointerdown’,function(){if(MSW.over||c.rev)return;pt=setTimeout(function(){mswFlag(i);mswRender();},500);});
+d.addEventListener(‘pointerup’,function(){clearTimeout(pt);});
+d.addEventListener(‘pointercancel’,function(){clearTimeout(pt);});
+d.addEventListener(‘click’,function(){if(!MSW.over&&!c.flag&&!c.rev){mswReveal(i);mswRender();}});
+d.addEventListener(‘contextmenu’,function(e){e.preventDefault();if(!MSW.over&&!c.rev){mswFlag(i);mswRender();}});
+board.appendChild(d);
+})(MSW.cells[ci],ci);}
+var face=document.getElementById(‘msw-face’); if(face)face.textContent=MSW.over?(MSW.won?E.cool:E.dizzy):E.smile;
+}
+function mswReveal(i) {
+if(!MSW.started){MSW.started=true;MSW_INTERVAL=setInterval(function(){MSW.secs++;var t=document.getElementById(‘msw-time’);if(t)t.textContent=pad3(MSW.secs);},1000);}
+var c=MSW.cells[i]; if(c.rev||c.flag)return; c.rev=true;
+if(c.mine){MSW.over=true;clearInterval(MSW_INTERVAL);for(var j=0;j<MSW.cells.length;j++){if(MSW.cells[j].mine)MSW.cells[j].rev=true;}return;}
+if(c.adj===0){var row=Math.floor(i/MSW.C),col=i%MSW.C;for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var nr=row+dr,nc=col+dc;if(nr>=0&&nr<MSW.R&&nc>=0&&nc<MSW.C)mswReveal(nr*MSW.C+nc);}}
+var u=0;for(var k=0;k<MSW.cells.length;k++){if(!MSW.cells[k].rev&&!MSW.cells[k].mine)u++;}
+if(u===0){MSW.over=true;MSW.won=true;clearInterval(MSW_INTERVAL);}
+}
+function mswFlag(i){var c=MSW.cells[i];if(c.rev)return;c.flag=!c.flag;MSW.flags+=c.flag?1:-1;var el=document.getElementById(‘msw-mines’);if(el)el.textContent=pad3(MSW.M-MSW.flags);}
+
+// DESKTOP WINDOWS
+var dZ=10,dWins={},dStartOpen=false;
+var D_DEFS={
+explorer:{title:‘My Documents’,icon:E.folder,w:520,h:360,tb:true},
+computer:{title:‘My Computer’,icon:E.pc,w:480,h:320,tb:true},
+recycle:{title:‘Recycle Bin’,icon:E.trash,w:380,h:260,tb:true},
+notepad:{title:‘Untitled - Notepad’,icon:E.note,w:440,h:340},
+ie:{title:‘Microsoft Internet Explorer’,icon:E.globe,w:560,h:400,tb:true},
+error:{title:‘Fatal Error’,icon:E.stop,w:380,h:200,dialog:true}
+};
+
+function d_open(id) {
+dStartOpen=false; rmClass(document.getElementById(‘start-menu’),‘open’);
+if(dWins[id]){d_front(id);return;}
+var def=D_DEFS[id]; if(!def)return;
+var n=0; for(var k in dWins)if(dWins.hasOwnProperty(k))n++;
+var win=document.createElement(‘div’); win.className=‘xp-window’; win.id=‘dw-’+id;
+win.style.cssText=‘left:’+(60+n*24)+‘px;top:’+(40+n*20)+‘px;width:’+def.w+‘px;height:’+def.h+‘px;z-index:’+(++dZ);
+var ctrl=’<div class="win-controls">’;
+if(!def.dialog)ctrl+=’<div class="win-btn win-btn-min" onclick="d_close(\''+id+'\')">_</div><div class="win-btn win-btn-max">\u25A1</div>’;
+ctrl+=’<div class="win-btn win-btn-close" onclick="d_close(\''+id+'\')">\u2715</div></div>’;
+var menu=!def.dialog?’<div class="xp-menubar"><div class="xp-menu-item">File</div><div class="xp-menu-item">Edit</div><div class="xp-menu-item">View</div><div class="xp-menu-item">Help</div></div>’:’’;
+var tb=def.tb?’<div class="xp-toolbar"><button class="tb-btn">\u2B05</button><button class="tb-btn">\u27A1</button><input class="xp-address" value="'+def.title+'" readonly></div>’:’’;
+var status=!def.dialog?’<div class="xp-statusbar">Ready</div>’:’’;
+var bg=def.dialog?‘background:#ece9d8’:’’;
+win.innerHTML=’<div class="xp-titlebar"><span class="win-icon">’+def.icon+’</span><span class="win-title">’+def.title+’</span>’+ctrl+’</div>’+menu+tb+’<div class="xp-content" style="'+bg+'">’+buildContent(id)+’</div>’+status;
+document.getElementById(‘windows-container’).appendChild(win);
+dWins[id]=win;
+d_makeDraggable(win,win.querySelector(’.xp-titlebar’));
+var btn=document.createElement(‘div’); btn.className=‘taskbar-app active’; btn.id=‘dtb-’+id;
+var st=def.title.length>16?def.title.substring(0,16)+’\u2026’:def.title;
+btn.innerHTML=def.icon+’ ‘+st; btn.onclick=function(){d_front(id);};
+document.getElementById(‘taskbar-apps’).appendChild(btn);
+if(id===‘error’)setTimeout(function(){d_clippy_show(‘error’);},600);
+}
+function d_close(id){
+var w=document.getElementById(‘dw-’+id); if(w&&w.parentNode)w.parentNode.removeChild(w);
+var b=document.getElementById(‘dtb-’+id); if(b&&b.parentNode)b.parentNode.removeChild(b);
+delete dWins[id];
+}
+function d_front(id){
+var w=document.getElementById(‘dw-’+id); if(w)w.style.zIndex=++dZ;
+var apps=document.querySelectorAll(’.taskbar-app’);
+for(var i=0;i<apps.length;i++) rmClass(apps[i],‘active’);
+var b=document.getElementById(‘dtb-’+id); if(b) addClass(b,‘active’);
+}
+function d_makeDraggable(el,handle){
+function start(cx,cy){
+var ox=cx-el.offsetLeft,oy=cy-el.offsetTop;
+function mv(e){var x=e.touches?e.touches[0].clientX:e.clientX,y=e.touches?e.touches[0].clientY:e.clientY;el.style.left=Math.max(0,x-ox)+‘px’;el.style.top=Math.max(0,y-oy)+‘px’;}
+function up(){document.removeEventListener(‘mousemove’,mv);document.removeEventListener(‘mouseup’,up);document.removeEventListener(‘touchmove’,mv);document.removeEventListener(‘touchend’,up);}
+document.addEventListener(‘mousemove’,mv);document.addEventListener(‘mouseup’,up);
+document.addEventListener(‘touchmove’,mv,{passive:false});document.addEventListener(‘touchend’,up);
+}
+handle.addEventListener(‘mousedown’,function(e){d_front(el.id.replace(‘dw-’,’’));start(e.clientX,e.clientY);e.preventDefault();});
+handle.addEventListener(‘touchstart’,function(e){d_front(el.id.replace(‘dw-’,’’));start(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();},{passive:false});
+}
+function d_start_toggle(){dStartOpen=!dStartOpen;var sm=document.getElementById(‘start-menu’);if(dStartOpen)addClass(sm,‘open’);else rmClass(sm,‘open’);}
+function d_shutdown(){for(var k in dWins)if(dWins.hasOwnProperty(k))d_close(k);}
+document.addEventListener(‘click’,function(e){
+if(dStartOpen&&!e.target.closest(’#start-menu’)&&!e.target.closest(’#start-btn’)){dStartOpen=false;rmClass(document.getElementById(‘start-menu’),‘open’);}
+});
+
+// DESKTOP CLIPPY
+var D_LINES={‘default’:“It looks like you are trying to use a computer. Would you like help?”,‘error’:“It looks like your computer has a fatal virus. Would you like me to write a letter about it?”,‘recycle’:“Those files are gone <b>forever</b>. I hope you meant to do that.”,‘start’:“It looks like you opened the Start menu. Exciting times.”,‘yes’:“Great! Unfortunately I have no idea how to help. But I am here for you! “+E.happy,‘no’:“Fine. I will just be right here. <i>Watching.</i>”,‘dismiss’:“Fine. But you will be back. <i>They always come back.</i>”};
+var dClippyOn=false;
+function d_clippy_toggle(){dClippyOn=!dClippyOn;var el=document.getElementById(‘d-clippy-bubble’);if(dClippyOn)addClass(el,‘show’);else rmClass(el,‘show’);}
+function d_clippy_show(k){document.getElementById(‘d-clippy-text’).innerHTML=D_LINES[k]||D_LINES[‘default’];addClass(document.getElementById(‘d-clippy-bubble’),‘show’);dClippyOn=true;}
+function d_clippy_say(k){document.getElementById(‘d-clippy-text’).innerHTML=D_LINES[k];if(k===‘dismiss’)setTimeout(function(){rmClass(document.getElementById(‘d-clippy-bubble’),‘show’);dClippyOn=false;},2000);}
+if(!IS_MOBILE){setTimeout(function(){d_clippy_show(‘default’);d_open(‘explorer’);},400);}
+
+// MOBILE SHEET
+function m_open(id){
+var ICONS={explorer:E.folder,computer:E.pc,recycle:E.trash,notepad:E.note,ie:E.globe,error:E.stop,msw:E.bomb};
+var TITLES={explorer:‘My Documents’,computer:‘My Computer’,recycle:‘Recycle Bin’,notepad:‘Notepad’,ie:‘Internet Explorer’,error:‘Fatal Error’,msw:‘Minesweeper’};
+document.getElementById(‘mob-sh-icon’).textContent=ICONS[id]||E.folder;
+document.getElementById(‘mob-sh-title’).textContent=TITLES[id]||id;
+document.getElementById(‘mob-sheet-body’).innerHTML=buildContent(id);
+addClass(document.getElementById(‘mob-sheet’),‘open’);
+m_clippy_hide();
+if(id===‘msw’)mswInit();
+if(id===‘error’)setTimeout(m_clippy_show,700);
+}
+function m_close(){rmClass(document.getElementById(‘mob-sheet’),‘open’);}
+var _sy=0;
+document.getElementById(‘mob-sheet’).addEventListener(‘touchstart’,function(e){_sy=e.touches[0].clientY;},{passive:true});
+document.getElementById(‘mob-sheet’).addEventListener(‘touchend’,function(e){if(e.changedTouches[0].clientY-_sy>90)m_close();},{passive:true});
+
+// MOBILE CLIPPY
+var M_LINES=[“It looks like you are using a phone to pretend it is 2001. Interesting choice.”,“It looks like you tapped me. That is exactly what I wanted.”,“It looks like you are bored. Let me tell you about pivot tables.”,“Would you like to write a letter? I can help you write a letter.”,“It looks like you are still here. So am I. <i>Always.</i>”,“It looks like you have not found the virus yet. It is in there somewhere.”];
+var mCI=0,mClippyOn=false;
+function m_clippy_say(t){document.getElementById(‘mob-clippy-text’).innerHTML=t;addClass(document.getElementById(‘mob-clippy-bubble’),‘show’);mClippyOn=true;}
+function m_clippy_show(){m_clippy_say(M_LINES[mCI%M_LINES.length]);mCI++;}
+function m_clippy_hide(){rmClass(document.getElementById(‘mob-clippy-bubble’),‘show’);mClippyOn=false;}
+function m_clippy_toggle(){mClippyOn?m_clippy_hide():m_clippy_show();}
+function m_clippy_reply(r){r===‘yes’?m_clippy_say(“Great! Unfortunately I have no idea how to help. “+E.happy):m_clippy_say(“Fine. I will be right here. <i>Watching.</i>”);}
+if(IS_MOBILE)setTimeout(m_clippy_show,1500);
+</script>
+
+</body>
+</html>
