@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Windows XP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tahoma:wght@400;700&display=swap');
+
+- { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+
+body {
+font-family: Tahoma, sans-serif;
+font-size: 11px;
+background: #3a6ea5 url(‘data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><defs><radialGradient id="g" cx="50%25" cy="40%25" r="60%25"><stop offset="0%25" stop-color="%234a90d9"/><stop offset="100%25" stop-color="%23245b8a"/></radialGradient></defs><rect width="400" height="300" fill="url(%23g)"/></svg>’) center/cover;
+height: 100vh;
+overflow: hidden;
+cursor: default;
+}
+
+/* DESKTOP */
+#desktop {
+position: absolute;
+top: 0; left: 0; right: 0; bottom: 30px;
+padding: 8px;
+}
+
+.desktop-icon {
+display: flex;
+flex-direction: column;
+align-items: center;
+width: 72px;
+margin-bottom: 4px;
+padding: 4px;
+border-radius: 2px;
+cursor: pointer;
+color: white;
+text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+font-size: 11px;
+text-align: center;
+}
+.desktop-icon:hover { background: rgba(49,106,197,0.6); border: 1px dotted rgba(255,255,255,0.6); }
+.desktop-icon img, .desktop-icon .icon { font-size: 32px; margin-bottom: 2px; }
+
+/* TASKBAR */
+#taskbar {
+position: absolute;
+bottom: 0; left: 0; right: 0;
+height: 30px;
+background: linear-gradient(to bottom, #245eab 0%, #3a7bd5 8%, #2860c8 15%, #1a4f9e 100%);
+display: flex;
+align-items: center;
+gap: 2px;
+border-top: 1px solid #0a2c6b;
+box-shadow: 0 -1px 0 #5b8fdf inset;
+}
+
+#start-btn {
+height: 26px;
+background: linear-gradient(to bottom, #5cb45c 0%, #3e9f3e 40%, #2e8b2e 100%);
+border: 1px solid #1a6b1a;
+border-radius: 0 12px 12px 0;
+color: white;
+font-weight: bold;
+font-size: 12px;
+padding: 0 12px 0 8px;
+display: flex; align-items: center; gap: 4px;
+cursor: pointer;
+box-shadow: 1px 1px 2px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+font-family: Tahoma, sans-serif;
+}
+#start-btn:hover { background: linear-gradient(to bottom, #6dca6d 0%, #4db34d 40%, #3a9a3a 100%); }
+#start-btn:active { background: linear-gradient(to bottom, #3a9a3a 0%, #4db34d 60%, #6dca6d 100%); }
+#start-btn .windows-logo { font-size: 16px; }
+
+#taskbar-apps {
+flex: 1;
+display: flex;
+align-items: center;
+gap: 2px;
+padding: 0 4px;
+}
+
+.taskbar-app {
+height: 22px;
+background: linear-gradient(to bottom, #3a5f9f 0%, #2850a0 100%);
+border: 1px solid #1a3a7a;
+border-radius: 2px;
+color: white;
+font-size: 11px;
+padding: 0 8px;
+display: flex; align-items: center; gap: 4px;
+cursor: pointer;
+min-width: 120px;
+font-family: Tahoma, sans-serif;
+}
+.taskbar-app.active {
+background: linear-gradient(to bottom, #1a3a7a 0%, #2850a0 100%);
+box-shadow: inset 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+#systray {
+height: 26px;
+background: linear-gradient(to bottom, #1a4a9e 0%, #2060c8 100%);
+border-left: 1px solid #0a2c6b;
+padding: 0 8px;
+display: flex; align-items: center; gap: 8px;
+color: white;
+font-size: 11px;
+}
+
+/* START MENU */
+#start-menu {
+position: absolute;
+bottom: 30px;
+left: 0;
+width: 300px;
+background: white;
+border: 1px solid #0a2c6b;
+border-radius: 4px 4px 0 0;
+box-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+display: none;
+flex-direction: column;
+}
+#start-menu.open { display: flex; }
+
+.start-header {
+background: linear-gradient(to right, #245eab, #3a7bd5);
+padding: 8px 12px;
+color: white;
+border-radius: 4px 4px 0 0;
+display: flex; align-items: center; gap: 8px;
+}
+.start-header .avatar { font-size: 32px; }
+.start-header .username { font-weight: bold; font-size: 13px; }
+
+.start-body {
+display: flex;
+}
+.start-left {
+flex: 1;
+padding: 4px 0;
+border-right: 1px solid #ddd;
+}
+.start-right {
+width: 130px;
+background: #e8f0fa;
+padding: 4px 0;
+}
+.start-item {
+padding: 5px 12px;
+cursor: pointer;
+display: flex; align-items: center; gap: 8px;
+font-size: 11px;
+}
+.start-item:hover { background: #316ac5; color: white; }
+.start-item .si-icon { font-size: 20px; width: 24px; text-align: center; }
+.start-footer {
+background: #d4e0f0;
+padding: 4px 8px;
+display: flex; justify-content: flex-end; gap: 8px;
+border-top: 1px solid #aac;
+}
+.start-footer button {
+padding: 2px 12px;
+background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+border: 1px solid #aaa;
+border-radius: 2px;
+cursor: pointer;
+font-family: Tahoma, sans-serif;
+font-size: 11px;
+display: flex; align-items: center; gap: 4px;
+}
+.start-footer button:hover { background: linear-gradient(to bottom, #e0e8ff, #c0c8f0); }
+
+/* WINDOWS */
+.xp-window {
+position: absolute;
+min-width: 300px;
+min-height: 200px;
+background: #ece9d8;
+border: 1px solid #0054a6;
+border-radius: 6px 6px 0 0;
+box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+display: flex;
+flex-direction: column;
+}
+
+.xp-titlebar {
+background: linear-gradient(to bottom, #5a9aff 0%, #245eab 4%, #0f4ea6 50%, #1a5fc0 96%, #5a9aff 100%);
+padding: 3px 4px;
+border-radius: 6px 6px 0 0;
+display: flex;
+align-items: center;
+gap: 4px;
+cursor: move;
+height: 26px;
+}
+.xp-titlebar .win-icon { font-size: 14px; }
+.xp-titlebar .win-title { flex: 1; color: white; font-weight: bold; font-size: 12px; text-shadow: 1px 1px 1px rgba(0,0,0,0.5); }
+
+.win-controls { display: flex; gap: 2px; }
+.win-btn {
+width: 21px; height: 21px;
+border-radius: 3px;
+border: 1px solid rgba(0,0,0,0.3);
+cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+font-size: 11px;
+font-weight: bold;
+color: #333;
+font-family: Arial;
+}
+.win-btn-min { background: linear-gradient(to bottom, #e8e8e8, #c8c8c8); }
+.win-btn-max { background: linear-gradient(to bottom, #e8e8e8, #c8c8c8); }
+.win-btn-close {
+background: linear-gradient(to bottom, #f06060, #c03030);
+color: white;
+}
+.win-btn:hover.win-btn-close { background: linear-gradient(to bottom, #ff8080, #e04040); }
+.win-btn:hover:not(.win-btn-close) { background: linear-gradient(to bottom, #fff, #ddd); }
+
+.xp-menubar {
+background: #ece9d8;
+border-bottom: 1px solid #aaa;
+display: flex;
+padding: 0 4px;
+}
+.xp-menu-item {
+padding: 2px 6px;
+cursor: pointer;
+border-radius: 2px;
+font-size: 11px;
+}
+.xp-menu-item:hover { background: #316ac5; color: white; }
+
+.xp-toolbar {
+background: linear-gradient(to bottom, #f5f3ec, #dedad0);
+border-bottom: 1px solid #aaa;
+padding: 2px 4px;
+display: flex; align-items: center; gap: 2px;
+}
+.tb-btn {
+padding: 2px 6px;
+background: transparent;
+border: 1px solid transparent;
+border-radius: 2px;
+cursor: pointer;
+font-size: 11px;
+font-family: Tahoma, sans-serif;
+display: flex; align-items: center; gap: 2px;
+}
+.tb-btn:hover { background: #dbe5f8; border-color: #316ac5; }
+
+.xp-address {
+background: white;
+border: 1px solid #7f9db9;
+padding: 1px 4px;
+flex: 1;
+font-size: 11px;
+font-family: Tahoma, sans-serif;
+height: 20px;
+}
+
+.xp-content {
+flex: 1;
+overflow: auto;
+padding: 8px;
+background: white;
+}
+
+.xp-statusbar {
+background: linear-gradient(to bottom, #f5f3ec, #dedad0);
+border-top: 1px solid #aaa;
+padding: 2px 8px;
+font-size: 11px;
+color: #444;
+display: flex; gap: 16px;
+}
+
+/* FILE ICONS IN EXPLORER */
+.file-grid { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; }
+.file-item { display: flex; flex-direction: column; align-items: center; width: 72px; padding: 4px; border-radius: 2px; cursor: pointer; font-size: 11px; text-align: center; word-break: break-word; }
+.file-item:hover { background: #ccd9f0; border: 1px dotted #316ac5; }
+.file-item .fi { font-size: 32px; }
+
+/* NOTEPAD */
+.notepad-area {
+width: 100%; height: 100%;
+border: none; outline: none; resize: none;
+font-family: ‘Lucida Console’, monospace;
+font-size: 12px;
+padding: 4px;
+background: white;
+color: black;
+}
+
+/* ERROR DIALOG */
+.xp-dialog {
+position: absolute;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+width: 380px;
+z-index: 9999;
+}
+.dialog-body {
+background: #ece9d8;
+padding: 12px;
+display: flex; gap: 12px; align-items: flex-start;
+}
+.dialog-icon { font-size: 32px; }
+.dialog-text { flex: 1; font-size: 11px; line-height: 1.5; }
+.dialog-footer { background: #ece9d8; padding: 8px; display: flex; justify-content: center; gap: 8px; border-top: 1px solid #aaa; }
+.xp-btn {
+padding: 3px 20px;
+background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+border: 1px solid #7f9db9;
+border-radius: 2px;
+cursor: pointer;
+font-family: Tahoma, sans-serif;
+font-size: 11px;
+}
+.xp-btn:hover { background: linear-gradient(to bottom, #e0e8ff, #c0c8f0); }
+.xp-btn:active { background: linear-gradient(to bottom, #c0c8f0, #e0e8ff); }
+
+/* CLIPPY */
+#clippy {
+position: absolute;
+bottom: 40px; right: 16px;
+width: 80px;
+cursor: pointer;
+z-index: 8888;
+animation: clippyFloat 3s ease-in-out infinite;
+}
+@keyframes clippyFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+#clippy-body { font-size: 56px; text-align: center; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3)); }
+#clippy-eyes {
+display: flex; justify-content: center; gap: 10px;
+position: relative; top: -44px;
+}
+.clippy-eye {
+width: 10px; height: 14px;
+background: white; border-radius: 50%;
+border: 1px solid #333;
+position: relative;
+}
+.clippy-pupil {
+width: 5px; height: 7px;
+background: #222; border-radius: 50%;
+position: absolute; top: 2px; left: 2px;
+transition: transform 0.3s;
+}
+
+#clippy-bubble {
+position: absolute;
+bottom: 90px; right: 8px;
+width: 200px;
+background: #ffffc0;
+border: 2px solid #888;
+border-radius: 8px;
+padding: 8px;
+font-size: 11px;
+box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+display: none;
+font-family: Tahoma, sans-serif;
+line-height: 1.5;
+z-index: 9999;
+}
+#clippy-bubble::after {
+content: ‘’;
+position: absolute;
+bottom: -10px; right: 20px;
+width: 0; height: 0;
+border-left: 8px solid transparent;
+border-right: 8px solid transparent;
+border-top: 10px solid #888;
+}
+#clippy-bubble::before {
+content: ‘’;
+position: absolute;
+bottom: -8px; right: 21px;
+width: 0; height: 0;
+border-left: 7px solid transparent;
+border-right: 7px solid transparent;
+border-top: 9px solid #ffffc0;
+z-index: 1;
+}
+#clippy-bubble.show { display: block; }
+.clippy-btns { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+.clippy-btn { padding: 2px 6px; background: linear-gradient(to bottom, #f0f0f0, #d0d0d0); border: 1px solid #aaa; border-radius: 2px; cursor: pointer; font-size: 10px; font-family: Tahoma, sans-serif; }
+.clippy-btn:hover { background: linear-gradient(to bottom, #cde, #abd); }
+
+/* recycle bin emptying animation */
+@keyframes shake { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-5deg)} 75%{transform:rotate(5deg)} }
+.shaking { animation: shake 0.1s infinite; }
+</style>
+
+</head>
+<body>
+
+<!-- DESKTOP -->
+
+<div id="desktop">
+  <div class="desktop-icon" ondblclick="openWindow('explorer')">
+    <div class="icon">📁</div>
+    My Documents
+  </div>
+  <div class="desktop-icon" ondblclick="openWindow('computer')">
+    <div class="icon">💻</div>
+    My Computer
+  </div>
+  <div class="desktop-icon" ondblclick="openWindow('recycle')">
+    <div class="icon" id="recycle-icon">🗑️</div>
+    Recycle Bin
+  </div>
+  <div class="desktop-icon" ondblclick="openWindow('notepad')">
+    <div class="icon">📝</div>
+    Notepad
+  </div>
+  <div class="desktop-icon" ondblclick="openWindow('ie')">
+    <div class="icon">🌐</div>
+    Internet Explorer
+  </div>
+  <div class="desktop-icon" ondblclick="openWindow('error')">
+    <div class="icon">⚠️</div>
+    This PC Has a Virus.exe
+  </div>
+</div>
+
+<!-- WINDOWS CONTAINER -->
+
+<div id="windows-container"></div>
+
+<!-- START MENU -->
+
+<div id="start-menu">
+  <div class="start-header">
+    <div class="avatar">👤</div>
+    <div class="username">User</div>
+  </div>
+  <div class="start-body">
+    <div class="start-left">
+      <div class="start-item" ondblclick="openWindow('ie')"><span class="si-icon">🌐</span> Internet Explorer</div>
+      <div class="start-item" ondblclick="openWindow('notepad')"><span class="si-icon">📝</span> Notepad</div>
+      <div class="start-item" ondblclick="openWindow('explorer')"><span class="si-icon">📁</span> My Documents</div>
+      <div class="start-item" ondblclick="openWindow('error')"><span class="si-icon">⚠️</span> This PC Has a Virus.exe</div>
+      <hr style="margin:4px 12px; border-color:#ccc;">
+      <div class="start-item" onclick="showClippy('start')"><span class="si-icon">📎</span> Ask Clippy</div>
+    </div>
+    <div class="start-right">
+      <div class="start-item"><span class="si-icon">💻</span> My Computer</div>
+      <div class="start-item"><span class="si-icon">🖼️</span> My Pictures</div>
+      <div class="start-item"><span class="si-icon">🎵</span> My Music</div>
+      <div class="start-item"><span class="si-icon">🌐</span> Network</div>
+      <div class="start-item"><span class="si-icon">⚙️</span> Control Panel</div>
+      <div class="start-item"><span class="si-icon">🖨️</span> Printers</div>
+      <div class="start-item"><span class="si-icon">❓</span> Help & Support</div>
+    </div>
+  </div>
+  <div class="start-footer">
+    <button onclick="startShutdown()">🔌 Turn Off Computer</button>
+  </div>
+</div>
+
+<!-- TASKBAR -->
+
+<div id="taskbar">
+  <button id="start-btn" onclick="toggleStart()">
+    <span class="windows-logo">🪟</span>
+    <b>start</b>
+  </button>
+  <div id="taskbar-apps"></div>
+  <div id="systray">
+    <span>🔊</span>
+    <span>🌐</span>
+    <span id="clock"></span>
+  </div>
+</div>
+
+<!-- CLIPPY -->
+
+<div id="clippy" onclick="toggleClippy()">
+  <div id="clippy-body">📎</div>
+</div>
+<div id="clippy-bubble">
+  <div id="clippy-text">It looks like you're trying to use a computer. Would you like help?</div>
+  <div class="clippy-btns">
+    <button class="clippy-btn" onclick="clippyYes()">Yes</button>
+    <button class="clippy-btn" onclick="clippyNo()">No</button>
+    <button class="clippy-btn" onclick="clippyDismiss()">Go away</button>
+  </div>
+</div>
+
+<script>
+// ── CLOCK ──────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ── START MENU ─────────────────────────────────────────────────
+let startOpen = false;
+function toggleStart() {
+  startOpen = !startOpen;
+  document.getElementById('start-menu').classList.toggle('open', startOpen);
+}
+document.addEventListener('click', e => {
+  if (startOpen && !e.target.closest('#start-menu') && !e.target.closest('#start-btn')) {
+    startOpen = false;
+    document.getElementById('start-menu').classList.remove('open');
+  }
+});
+
+function startShutdown() {
+  closeAllWindows();
+  document.getElementById('start-menu').classList.remove('open');
+  startOpen = false;
+  setTimeout(() => {
+    showErrorDialog({
+      title: 'Shut Down Windows',
+      icon: '🔌',
+      msg: 'It is now safe to turn off your computer.<br><br>Or just close the tab, that works too.',
+      btn: 'OK'
+    });
+  }, 300);
+}
+
+// ── WINDOW MANAGEMENT ─────────────────────────────────────────
+let zTop = 10;
+const openWindows = {};
+
+const windowDefs = {
+  explorer: { title: 'My Documents', icon: '📁', w: 520, h: 360, type: 'explorer' },
+  computer: { title: 'My Computer', icon: '💻', w: 480, h: 320, type: 'computer' },
+  recycle:  { title: 'Recycle Bin', icon: '🗑️', w: 400, h: 280, type: 'recycle' },
+  notepad:  { title: 'Untitled - Notepad', icon: '📝', w: 440, h: 340, type: 'notepad' },
+  ie:       { title: 'Microsoft Internet Explorer', icon: '🌐', w: 560, h: 400, type: 'ie' },
+  error:    { title: 'This PC Has a Virus.exe', icon: '⚠️', w: 380, h: 180, type: 'error' },
+};
+
+function openWindow(id) {
+  document.getElementById('start-menu').classList.remove('open');
+  startOpen = false;
+  if (openWindows[id]) {
+    bringToFront(id);
+    return;
+  }
+  const def = windowDefs[id];
+  if (!def) return;
+
+  const win = document.createElement('div');
+  win.className = 'xp-window';
+  win.id = 'win-' + id;
+  const left = 60 + Object.keys(openWindows).length * 24;
+  const top = 40 + Object.keys(openWindows).length * 20;
+  win.style.cssText = `left:${left}px;top:${top}px;width:${def.w}px;height:${def.h}px;z-index:${++zTop}`;
+  win.innerHTML = buildWindow(id, def);
+  document.getElementById('windows-container').appendChild(win);
+  openWindows[id] = win;
+
+  makeDraggable(win, win.querySelector('.xp-titlebar'));
+  addTaskbarBtn(id, def);
+
+  if (def.type === 'error') {
+    setTimeout(() => showClippy('error'), 800);
+  }
+}
+
+function buildWindow(id, def) {
+  const menu = `<div class="xp-menubar">
+    <div class="xp-menu-item">File</div>
+    <div class="xp-menu-item">Edit</div>
+    <div class="xp-menu-item">View</div>
+    <div class="xp-menu-item">Help</div>
+  </div>`;
+  const toolbar = `<div class="xp-toolbar">
+    <button class="tb-btn">⬅ Back</button>
+    <button class="tb-btn">➡ Forward</button>
+    <button class="tb-btn">⬆ Up</button>
+    <button class="tb-btn">🔍 Search</button>
+    <input class="xp-address" value="${def.title}" readonly>
+    <button class="tb-btn">▶ Go</button>
+  </div>`;
+  const statusbar = `<div class="xp-statusbar"><span>Ready</span><span>1 object(s)</span></div>`;
+
+  let content = '';
+  if (def.type === 'explorer') {
+    content = `<div class="file-grid">
+      ${['📄 Resume.doc','📊 Budget_Final_FINAL.xls','🖼️ vacation_photos','🎵 Linkin Park - Numb.mp3','📄 Letter_to_Santa.txt','📁 My Stuff','📁 Secret Stuff','💾 Napster'].map(f=>
+        `<div class="file-item"><div class="fi">${f.split(' ')[0]}</div><div>${f.split(' ').slice(1).join(' ')}</div></div>`
+      ).join('')}
+    </div>`;
+  } else if (def.type === 'computer') {
+    content = `<div class="file-grid">
+      <div class="file-item"><div class="fi">💾</div><div>3½ Floppy (A:)</div></div>
+      <div class="file-item"><div class="fi">💿</div><div>Local Disk (C:)</div></div>
+      <div class="file-item"><div class="fi">📀</div><div>CD-ROM (D:)</div></div>
+      <div class="file-item"><div class="fi">🖨️</div><div>Printers</div></div>
+      <div class="file-item"><div class="fi">⚙️</div><div>Control Panel</div></div>
+    </div>`;
+  } else if (def.type === 'recycle') {
+    content = `<div style="padding:16px;text-align:center;color:#666">
+      <div style="font-size:48px">🗑️</div>
+      <p>The Recycle Bin is empty.</p>
+      <br><button class="xp-btn" onclick="emptyRecycle()">Empty Recycle Bin</button>
+    </div>`;
+  } else if (def.type === 'notepad') {
+    return `<div class="xp-titlebar" ondblclick="bringToFront('${id}')">
+      <span class="win-icon">${def.icon}</span>
+      <span class="win-title">${def.title}</span>
+      <div class="win-controls">
+        <div class="win-btn win-btn-min" onclick="closeWindow('${id}')">_</div>
+        <div class="win-btn win-btn-max" onclick="">□</div>
+        <div class="win-btn win-btn-close" onclick="closeWindow('${id}')">✕</div>
+      </div>
+    </div>
+    ${menu}
+    <textarea class="notepad-area" placeholder="Start typing...&#10;&#10;If Clippy shows up, that's not your fault."></textarea>`;
+
+} else if (def.type === ‘ie’) {
+content = `<div style="padding:24px;text-align:center;font-family:Tahoma,sans-serif"> <div style="font-size:48px">🌐</div> <h2 style="color:#00008b;font-size:18px;margin:8px 0">MSN.com</h2> <hr style="border-color:#ccc;margin:8px 0"> <p style="color:#333;font-size:12px">Today's Headlines:</p> <ul style="text-align:left;margin:8px 0 0 24px;font-size:11px;color:#000066;line-height:2"> <li>Windows XP Declares Itself Greatest OS Ever</li> <li>Kazaa Downloads Up 400%</li> <li>AIM Away Messages: An Art Form</li> <li>YOUR COMPUTER MAY BE AT RISK — Click here!!</li> <li>CONGRATULATIONS! You are the 1,000,000th visitor!</li> </ul> <br> <div style="background:#ffff99;border:1px solid #999;padding:8px;font-size:11px"> ⚠️ You have 47 popup windows blocked. <a href="#" style="color:blue">Allow all popups</a> </div> </div>`;
+} else if (def.type === ‘error’) {
+content = `<div class="dialog-body"> <div class="dialog-icon">⛔</div> <div class="dialog-text"> <b>Fatal Error: VIRUS_DETECTED</b><br><br> This PC has encountered a critical virus and needs to restart 47 times.<br><br> All your files have been sent to a prince in Nigeria.<br><br> <i>Call 1-800-NOTASCAM for immediate support.</i> </div> </div> <div class="dialog-footer"> <button class="xp-btn" onclick="closeWindow('${id}')">OK</button> <button class="xp-btn" onclick="openWindow('error2'); closeWindow('${id}')">Cancel</button> <button class="xp-btn" onclick="openWindow('error2'); closeWindow('${id}')">OK</button> </div>`;
+return `<div class="xp-titlebar"> <span class="win-icon">${def.icon}</span> <span class="win-title">${def.title}</span> <div class="win-controls"> <div class="win-btn win-btn-close" onclick="closeWindow('${id}')">✕</div> </div> </div><div>${content}</div>`;
+}
+
+return `<div class="xp-titlebar" onclick="bringToFront('${id}')">
+<span class="win-icon">${def.icon}</span>
+<span class="win-title">${def.title}</span>
+<div class="win-controls">
+<div class="win-btn win-btn-min" onclick="closeWindow('${id}')">_</div>
+<div class="win-btn win-btn-max">□</div>
+<div class="win-btn win-btn-close" onclick="closeWindow('${id}')">✕</div>
+</div>
+
+  </div>
+  ${menu}
+  ${toolbar}
+  <div class="xp-content">${content}</div>
+  ${statusbar}`;
+}
+
+// error2 easter egg
+windowDefs[‘error2’] = { title: ‘Another Error’, icon: ‘⛔’, w: 360, h: 160, type: ‘error2’ };
+windowDefs[‘error2’].buildOverride = true;
+
+function closeWindow(id) {
+const win = document.getElementById(‘win-’ + id);
+if (win) win.remove();
+delete openWindows[id];
+const btn = document.getElementById(‘tb-’ + id);
+if (btn) btn.remove();
+}
+
+function closeAllWindows() {
+Object.keys(openWindows).forEach(closeWindow);
+}
+
+function bringToFront(id) {
+const win = document.getElementById(‘win-’ + id);
+if (win) win.style.zIndex = ++zTop;
+Object.querySelectorAll && document.querySelectorAll(’.taskbar-app’).forEach(b => b.classList.remove(‘active’));
+const btn = document.getElementById(‘tb-’ + id);
+if (btn) btn.classList.add(‘active’);
+}
+
+function addTaskbarBtn(id, def) {
+const apps = document.getElementById(‘taskbar-apps’);
+const btn = document.createElement(‘div’);
+btn.className = ‘taskbar-app active’;
+btn.id = ‘tb-’ + id;
+btn.innerHTML = `${def.icon} ${def.title.substring(0,18)}${def.title.length>18?'…':''}`;
+btn.onclick = () => bringToFront(id);
+apps.appendChild(btn);
+}
+
+// ── DRAG ──────────────────────────────────────────────────────
+function makeDraggable(el, handle) {
+let ox, oy;
+handle.addEventListener(‘mousedown’, e => {
+bringToFront(el.id.replace(‘win-’,’’));
+ox = e.clientX - el.offsetLeft;
+oy = e.clientY - el.offsetTop;
+const move = e2 => {
+el.style.left = Math.max(0, e2.clientX - ox) + ‘px’;
+el.style.top  = Math.max(0, e2.clientY - oy) + ‘px’;
+};
+const up = () => { document.removeEventListener(‘mousemove’, move); document.removeEventListener(‘mouseup’, up); };
+document.addEventListener(‘mousemove’, move);
+document.addEventListener(‘mouseup’, up);
+e.preventDefault();
+});
+}
+
+// ── RECYCLE ───────────────────────────────────────────────────
+function emptyRecycle() {
+const icon = document.getElementById(‘recycle-icon’);
+icon.classList.add(‘shaking’);
+setTimeout(() => { icon.classList.remove(‘shaking’); icon.textContent = ‘🗑️’; showClippy(‘recycle’); }, 1000);
+}
+
+// ── ERROR DIALOG ─────────────────────────────────────────────
+function showErrorDialog({title, icon, msg, btn}) {
+const d = document.createElement(‘div’);
+d.className = ‘xp-window xp-dialog’;
+d.style.zIndex = 9999;
+d.innerHTML = ` <div class="xp-titlebar"><span class="win-icon">${icon}</span><span class="win-title">${title}</span></div> <div class="dialog-body"><div class="dialog-icon">${icon}</div><div class="dialog-text">${msg}</div></div> <div class="dialog-footer"><button class="xp-btn" onclick="this.closest('.xp-dialog').remove()">${btn}</button></div>`;
+document.getElementById(‘windows-container’).appendChild(d);
+}
+
+// ── CLIPPY ────────────────────────────────────────────────────
+const clippyLines = {
+default: “It looks like you’re trying to use a computer. Would you like help?”,
+error: “It looks like your computer has a fatal virus. Would you like me to write a letter about it?”,
+recycle: “It looks like you emptied the Recycle Bin. Those files are gone forever. <b>Forever.</b> Sleep well.”,
+start: “It looks like you’re trying to find something. Have you tried looking in My Documents?”,
+yes: “Great! Unfortunately, I have no idea how to help with that. But I’m here for you! 😊”,
+no: “That’s fine. I’ll just be right here. Watching.”,
+dismiss: “Fine. I’ll go. But you’ll be back. <i>They always come back.</i>”,
+idle: “It looks like you haven’t clicked anything. Would you like help clicking things?”,
+};
+
+let clippyShowing = false;
+
+function toggleClippy() {
+const bubble = document.getElementById(‘clippy-bubble’);
+clippyShowing = !clippyShowing;
+if (clippyShowing) {
+document.getElementById(‘clippy-text’).innerHTML = clippyLines.default;
+bubble.classList.add(‘show’);
+} else {
+bubble.classList.remove(‘show’);
+}
+}
+
+function showClippy(context) {
+const bubble = document.getElementById(‘clippy-bubble’);
+document.getElementById(‘clippy-text’).innerHTML = clippyLines[context] || clippyLines.default;
+bubble.classList.add(‘show’);
+clippyShowing = true;
+}
+
+function clippyYes() {
+document.getElementById(‘clippy-text’).innerHTML = clippyLines.yes;
+}
+function clippyNo() {
+document.getElementById(‘clippy-text’).innerHTML = clippyLines.no;
+}
+function clippyDismiss() {
+document.getElementById(‘clippy-text’).innerHTML = clippyLines.dismiss;
+setTimeout(() => {
+document.getElementById(‘clippy-bubble’).classList.remove(‘show’);
+clippyShowing = false;
+}, 2000);
+}
+
+// Clippy randomly pops up
+let idleTimer = setTimeout(() => showClippy(‘idle’), 30000);
+document.addEventListener(‘click’, () => {
+clearTimeout(idleTimer);
+idleTimer = setTimeout(() => showClippy(‘idle’), 45000);
+});
+
+// ── BOOT GREETING ─────────────────────────────────────────────
+window.addEventListener(‘load’, () => {
+setTimeout(() => {
+showClippy(‘default’);
+openWindow(‘explorer’);
+}, 600);
+});
+</script>
+
+</body>
+</html>
