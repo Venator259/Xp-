@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -155,7 +154,7 @@ display:flex; align-items:center; gap:4px;
 .xp-address { background:white; border:1px solid #7f9db9; padding:1px 4px; flex:1; font-size:11px; font-family:Tahoma,sans-serif; height:20px; min-width:0; }
 .xp-content { flex:1; overflow:auto; background:white; -webkit-overflow-scrolling:touch; }
 .xp-statusbar { background:linear-gradient(to bottom,#f5f3ec,#dedad0); border-top:1px solid #aaa; padding:2px 8px; font-size:11px; color:#444; flex-shrink:0; }
-.notepad-area { width:100%; height:100%; border:none; outline:none; resize:none; font-family:‘Lucida Console’,monospace; font-size:14px; padding:4px; display:block; -webkit-appearance:none; border-radius:0; }
+.notepad-area { width:100%; height:100%; border:none; outline:none; resize:none; font-family:'Lucida Console',monospace; font-size:14px; padding:4px; display:block; -webkit-appearance:none; border-radius:0; }
 .dialog-body { padding:12px; display:flex; gap:12px; align-items:flex-start; }
 .dialog-icon { font-size:32px; }
 .dialog-text { flex:1; font-size:11px; line-height:1.6; }
@@ -168,8 +167,8 @@ background:#ffffc0; border:2px solid #888; border-radius:8px; padding:8px;
 font-size:11px; line-height:1.5; box-shadow:2px 2px 6px rgba(0,0,0,0.3);
 font-family:Tahoma,sans-serif; z-index:9999;
 }
-#d-clippy-bubble::after { content:’’; position:absolute; bottom:-10px; right:20px; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid #888; }
-#d-clippy-bubble::before { content:’’; position:absolute; bottom:-8px; right:21px; border-left:7px solid transparent; border-right:7px solid transparent; border-top:9px solid #ffffc0; z-index:1; }
+#d-clippy-bubble::after { content:''; position:absolute; bottom:-10px; right:20px; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid #888; }
+#d-clippy-bubble::before { content:''; position:absolute; bottom:-8px; right:21px; border-left:7px solid transparent; border-right:7px solid transparent; border-top:9px solid #ffffc0; z-index:1; }
 #d-clippy-bubble.show { display:block; }
 
 #mob-bg {
@@ -246,10 +245,9 @@ font-size:12px; line-height:1.5; box-shadow:2px 2px 8px rgba(0,0,0,0.35);
 font-family:Tahoma,sans-serif; z-index:400;
 }
 #mob-clippy-bubble.show { display:block; }
-#mob-clippy-bubble::after { content:’’; position:absolute; bottom:-10px; right:18px; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid #888; }
-#mob-clippy-bubble::before { content:’’; position:absolute; bottom:-8px; right:19px; border-left:7px solid transparent; border-right:7px solid transparent; border-top:9px solid #ffffc0; z-index:1; }
+#mob-clippy-bubble::after { content:''; position:absolute; bottom:-10px; right:18px; border-left:8px solid transparent; border-right:8px solid transparent; border-top:10px solid #888; }
+#mob-clippy-bubble::before { content:''; position:absolute; bottom:-8px; right:19px; border-left:7px solid transparent; border-right:7px solid transparent; border-top:9px solid #ffffc0; z-index:1; }
 </style>
-
 </head>
 <body>
 
@@ -436,170 +434,165 @@ function buildContent(id) {
       return '<div style="padding:28px;text-align:center;font-family:Tahoma,sans-serif"><div style="font-size:56px">' + E.trash + '</div><p style="margin:10px 0;font-size:13px">The Recycle Bin is empty.</p><button class="xp-btn" style="margin-top:12px" onclick="emptyRecycle()">Empty Recycle Bin</button></div>';
     case 'notepad':
       return '<textarea class="notepad-area" style="height:300px" placeholder="Start typing...\n\nIf Clippy shows up, that is not your fault."></textarea>';
-
-```
-case 'ie':
-  return '<div style="padding:16px;text-align:center;font-family:Tahoma,sans-serif"><div style="font-size:52px">' + E.globe + '</div><h2 style="color:#00008b;font-size:17px;margin:8px 0">MSN.com</h2><hr style="border-color:#ccc;margin:8px 0"><ul style="text-align:left;margin:0 0 0 20px;font-size:12px;color:#000066;line-height:2.4"><li>Windows XP Declares Itself Greatest OS Ever</li><li>Kazaa Downloads Up 400%</li><li>AIM Away Messages: An Art Form</li><li>YOUR COMPUTER MAY BE AT RISK \u2014 Click here!!</li><li>' + E.party + ' You are the 1,000,000th visitor!</li></ul><div style="background:#ffff99;border:1px solid #999;padding:8px;font-size:11px;margin-top:12px">' + E.warn + ' 47 popup windows blocked.</div></div>';
-case 'error':
-  return '<div class="dialog-body"><div class="dialog-icon">' + E.stop + '</div><div class="dialog-text"><b>Fatal Error: VIRUS_DETECTED</b><br><br>All your files have been sent to a prince in Nigeria.<br><br><i>Call 1-800-NOTASCAM for immediate support.</i></div></div><div class="dialog-footer"><button class="xp-btn" onclick="m_close();d_close(\'error\')">OK</button><button class="xp-btn" onclick="m_close();d_close(\'error\')">Cancel</button></div>';
-case 'msw':
-  return buildMSW();
-default:
-  return '<div style="padding:16px">Nothing here.</div>';
-```
-
-}
+    case 'ie':
+      return '<div style="padding:16px;text-align:center;font-family:Tahoma,sans-serif"><div style="font-size:52px">' + E.globe + '</div><h2 style="color:#00008b;font-size:17px;margin:8px 0">MSN.com</h2><hr style="border-color:#ccc;margin:8px 0"><ul style="text-align:left;margin:0 0 0 20px;font-size:12px;color:#000066;line-height:2.4"><li>Windows XP Declares Itself Greatest OS Ever</li><li>Kazaa Downloads Up 400%</li><li>AIM Away Messages: An Art Form</li><li>YOUR COMPUTER MAY BE AT RISK \u2014 Click here!!</li><li>' + E.party + ' You are the 1,000,000th visitor!</li></ul><div style="background:#ffff99;border:1px solid #999;padding:8px;font-size:11px;margin-top:12px">' + E.warn + ' 47 popup windows blocked.</div></div>';
+    case 'error':
+      return '<div class="dialog-body"><div class="dialog-icon">' + E.stop + '</div><div class="dialog-text"><b>Fatal Error: VIRUS_DETECTED</b><br><br>All your files have been sent to a prince in Nigeria.<br><br><i>Call 1-800-NOTASCAM for immediate support.</i></div></div><div class="dialog-footer"><button class="xp-btn" onclick="m_close();d_close(\'error\')">OK</button><button class="xp-btn" onclick="m_close();d_close(\'error\')">Cancel</button></div>';
+    case 'msw':
+      return buildMSW();
+    default:
+      return '<div style="padding:16px">Nothing here.</div>';
+  }
 }
 
 function emptyRecycle() {
-var ic = document.getElementById(‘recycle-icon’);
-if (ic) { addClass(ic, ‘shaking’); setTimeout(function(){ rmClass(ic, ‘shaking’); }, 1200); }
-if (IS_MOBILE) m_clippy_say(“Those files are gone <b>forever</b>. Sleep well.”);
-else d_clippy_show(‘recycle’);
+  var ic = document.getElementById('recycle-icon');
+  if (ic) { addClass(ic, 'shaking'); setTimeout(function(){ rmClass(ic, 'shaking'); }, 1200); }
+  if (IS_MOBILE) m_clippy_say("Those files are gone <b>forever</b>. Sleep well.");
+  else d_clippy_show('recycle');
 }
 
 // MINESWEEPER
 var MSW = null, MSW_INTERVAL = null;
 function buildMSW() {
-return ‘<div style="padding:10px;font-family:Tahoma,sans-serif;-webkit-user-select:none;user-select:none"><div style="display:flex;align-items:center;gap:8px;background:#c0c0c0;padding:6px;border:2px inset #888;margin-bottom:8px"><div id="msw-mines" style="background:#000;color:#f00;font-family:monospace;font-size:20px;padding:2px 6px;min-width:40px;text-align:right">010</div><button onclick="mswInit()" style="flex:1;padding:4px;font-size:18px;background:#c0c0c0;border:2px outset #eee;cursor:pointer" id="msw-face">’ + E.smile + ‘</button><div id="msw-time" style="background:#000;color:#f00;font-family:monospace;font-size:20px;padding:2px 6px;min-width:40px">000</div></div><div id="msw-board" style="display:inline-grid;gap:1px;background:#888;border:2px inset #888;touch-action:manipulation"></div><p style="font-size:10px;color:#666;margin-top:8px">Tap = reveal · Hold = flag</p></div>’;
+  return '<div style="padding:10px;font-family:Tahoma,sans-serif;-webkit-user-select:none;user-select:none"><div style="display:flex;align-items:center;gap:8px;background:#c0c0c0;padding:6px;border:2px inset #888;margin-bottom:8px"><div id="msw-mines" style="background:#000;color:#f00;font-family:monospace;font-size:20px;padding:2px 6px;min-width:40px;text-align:right">010</div><button onclick="mswInit()" style="flex:1;padding:4px;font-size:18px;background:#c0c0c0;border:2px outset #eee;cursor:pointer" id="msw-face">' + E.smile + '</button><div id="msw-time" style="background:#000;color:#f00;font-family:monospace;font-size:20px;padding:2px 6px;min-width:40px">000</div></div><div id="msw-board" style="display:inline-grid;gap:1px;background:#888;border:2px inset #888;touch-action:manipulation"></div><p style="font-size:10px;color:#666;margin-top:8px">Tap = reveal &middot; Hold = flag</p></div>';
 }
 function mswInit() {
-clearInterval(MSW_INTERVAL);
-var R=9,C=9,M=10, cells=[];
-for (var i=0;i<R*C;i++) cells.push({i:i,mine:false,rev:false,flag:false,adj:0});
-var p=0; while(p<M){var r=Math.floor(Math.random()*R*C);if(!cells[r].mine){cells[r].mine=true;p++;}}
-for(var idx=0;idx<cells.length;idx++){if(cells[idx].mine)continue;var row=Math.floor(idx/C),col=idx%C;for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var nr=row+dr,nc=col+dc;if(nr>=0&&nr<R&&nc>=0&&nc<C&&cells[nr*C+nc].mine)cells[idx].adj++;}}
-MSW={cells:cells,R:R,C:C,M:M,started:false,over:false,won:false,flags:0,secs:0};
-var el; el=document.getElementById(‘msw-time’);if(el)el.textContent=‘000’; el=document.getElementById(‘msw-mines’);if(el)el.textContent=pad3(M); el=document.getElementById(‘msw-face’);if(el)el.textContent=E.smile;
-mswRender();
+  clearInterval(MSW_INTERVAL);
+  var R=9,C=9,M=10, cells=[];
+  for (var i=0;i<R*C;i++) cells.push({i:i,mine:false,rev:false,flag:false,adj:0});
+  var p=0; while(p<M){var r=Math.floor(Math.random()*R*C);if(!cells[r].mine){cells[r].mine=true;p++;}}
+  for(var idx=0;idx<cells.length;idx++){if(cells[idx].mine)continue;var row=Math.floor(idx/C),col=idx%C;for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var nr=row+dr,nc=col+dc;if(nr>=0&&nr<R&&nc>=0&&nc<C&&cells[nr*C+nc].mine)cells[idx].adj++;}}
+  MSW={cells:cells,R:R,C:C,M:M,started:false,over:false,won:false,flags:0,secs:0};
+  var el; el=document.getElementById('msw-time');if(el)el.textContent='000'; el=document.getElementById('msw-mines');if(el)el.textContent=pad3(M); el=document.getElementById('msw-face');if(el)el.textContent=E.smile;
+  mswRender();
 }
 function mswRender() {
-if(!MSW)return; var board=document.getElementById(‘msw-board’); if(!board)return;
-board.style.gridTemplateColumns=‘repeat(’+MSW.C+’,1fr)’; board.innerHTML=’’;
-var COLORS=[’’,’#00f’,’#080’,’#f00’,’#008’,’#800’,’#088’,’#000’,’#888’];
-for(var ci=0;ci<MSW.cells.length;ci++){(function(c,i){
-var d=document.createElement(‘div’);
-d.style.cssText=‘width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;cursor:pointer;background:#c0c0c0;border:2px outset #eee;’;
-if(c.rev){d.style.background=’#bbb’;d.style.border=‘1px solid #999’;if(c.mine){d.textContent=E.bomb;d.style.background=’#f44’;}else if(c.adj>0){d.textContent=c.adj;d.style.color=COLORS[c.adj];}}
-else if(c.flag){d.textContent=E.flag;}
-var pt;
-d.addEventListener(‘pointerdown’,function(){if(MSW.over||c.rev)return;pt=setTimeout(function(){mswFlag(i);mswRender();},500);});
-d.addEventListener(‘pointerup’,function(){clearTimeout(pt);});
-d.addEventListener(‘pointercancel’,function(){clearTimeout(pt);});
-d.addEventListener(‘click’,function(){if(!MSW.over&&!c.flag&&!c.rev){mswReveal(i);mswRender();}});
-d.addEventListener(‘contextmenu’,function(e){e.preventDefault();if(!MSW.over&&!c.rev){mswFlag(i);mswRender();}});
-board.appendChild(d);
-})(MSW.cells[ci],ci);}
-var face=document.getElementById(‘msw-face’); if(face)face.textContent=MSW.over?(MSW.won?E.cool:E.dizzy):E.smile;
+  if(!MSW)return; var board=document.getElementById('msw-board'); if(!board)return;
+  board.style.gridTemplateColumns='repeat('+MSW.C+',1fr)'; board.innerHTML='';
+  var COLORS=['','#00f','#080','#f00','#008','#800','#088','#000','#888'];
+  for(var ci=0;ci<MSW.cells.length;ci++){(function(c,i){
+    var d=document.createElement('div');
+    d.style.cssText='width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;cursor:pointer;background:#c0c0c0;border:2px outset #eee;';
+    if(c.rev){d.style.background='#bbb';d.style.border='1px solid #999';if(c.mine){d.textContent=E.bomb;d.style.background='#f44';}else if(c.adj>0){d.textContent=c.adj;d.style.color=COLORS[c.adj];}}
+    else if(c.flag){d.textContent=E.flag;}
+    var pt;
+    d.addEventListener('pointerdown',function(){if(MSW.over||c.rev)return;pt=setTimeout(function(){mswFlag(i);mswRender();},500);});
+    d.addEventListener('pointerup',function(){clearTimeout(pt);});
+    d.addEventListener('pointercancel',function(){clearTimeout(pt);});
+    d.addEventListener('click',function(){if(!MSW.over&&!c.flag&&!c.rev){mswReveal(i);mswRender();}});
+    d.addEventListener('contextmenu',function(e){e.preventDefault();if(!MSW.over&&!c.rev){mswFlag(i);mswRender();}});
+    board.appendChild(d);
+  })(MSW.cells[ci],ci);}
+  var face=document.getElementById('msw-face'); if(face)face.textContent=MSW.over?(MSW.won?E.cool:E.dizzy):E.smile;
 }
 function mswReveal(i) {
-if(!MSW.started){MSW.started=true;MSW_INTERVAL=setInterval(function(){MSW.secs++;var t=document.getElementById(‘msw-time’);if(t)t.textContent=pad3(MSW.secs);},1000);}
-var c=MSW.cells[i]; if(c.rev||c.flag)return; c.rev=true;
-if(c.mine){MSW.over=true;clearInterval(MSW_INTERVAL);for(var j=0;j<MSW.cells.length;j++){if(MSW.cells[j].mine)MSW.cells[j].rev=true;}return;}
-if(c.adj===0){var row=Math.floor(i/MSW.C),col=i%MSW.C;for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var nr=row+dr,nc=col+dc;if(nr>=0&&nr<MSW.R&&nc>=0&&nc<MSW.C)mswReveal(nr*MSW.C+nc);}}
-var u=0;for(var k=0;k<MSW.cells.length;k++){if(!MSW.cells[k].rev&&!MSW.cells[k].mine)u++;}
-if(u===0){MSW.over=true;MSW.won=true;clearInterval(MSW_INTERVAL);}
+  if(!MSW.started){MSW.started=true;MSW_INTERVAL=setInterval(function(){MSW.secs++;var t=document.getElementById('msw-time');if(t)t.textContent=pad3(MSW.secs);},1000);}
+  var c=MSW.cells[i]; if(c.rev||c.flag)return; c.rev=true;
+  if(c.mine){MSW.over=true;clearInterval(MSW_INTERVAL);for(var j=0;j<MSW.cells.length;j++){if(MSW.cells[j].mine)MSW.cells[j].rev=true;}return;}
+  if(c.adj===0){var row=Math.floor(i/MSW.C),col=i%MSW.C;for(var dr=-1;dr<=1;dr++)for(var dc=-1;dc<=1;dc++){var nr=row+dr,nc=col+dc;if(nr>=0&&nr<MSW.R&&nc>=0&&nc<MSW.C)mswReveal(nr*MSW.C+nc);}}
+  var u=0;for(var k=0;k<MSW.cells.length;k++){if(!MSW.cells[k].rev&&!MSW.cells[k].mine)u++;}
+  if(u===0){MSW.over=true;MSW.won=true;clearInterval(MSW_INTERVAL);}
 }
-function mswFlag(i){var c=MSW.cells[i];if(c.rev)return;c.flag=!c.flag;MSW.flags+=c.flag?1:-1;var el=document.getElementById(‘msw-mines’);if(el)el.textContent=pad3(MSW.M-MSW.flags);}
+function mswFlag(i){var c=MSW.cells[i];if(c.rev)return;c.flag=!c.flag;MSW.flags+=c.flag?1:-1;var el=document.getElementById('msw-mines');if(el)el.textContent=pad3(MSW.M-MSW.flags);}
 
 // DESKTOP WINDOWS
 var dZ=10,dWins={},dStartOpen=false;
 var D_DEFS={
-explorer:{title:‘My Documents’,icon:E.folder,w:520,h:360,tb:true},
-computer:{title:‘My Computer’,icon:E.pc,w:480,h:320,tb:true},
-recycle:{title:‘Recycle Bin’,icon:E.trash,w:380,h:260,tb:true},
-notepad:{title:‘Untitled - Notepad’,icon:E.note,w:440,h:340},
-ie:{title:‘Microsoft Internet Explorer’,icon:E.globe,w:560,h:400,tb:true},
-error:{title:‘Fatal Error’,icon:E.stop,w:380,h:200,dialog:true}
+  explorer:{title:'My Documents',icon:E.folder,w:520,h:360,tb:true},
+  computer:{title:'My Computer',icon:E.pc,w:480,h:320,tb:true},
+  recycle:{title:'Recycle Bin',icon:E.trash,w:380,h:260,tb:true},
+  notepad:{title:'Untitled - Notepad',icon:E.note,w:440,h:340},
+  ie:{title:'Microsoft Internet Explorer',icon:E.globe,w:560,h:400,tb:true},
+  error:{title:'Fatal Error',icon:E.stop,w:380,h:200,dialog:true}
 };
 
 function d_open(id) {
-dStartOpen=false; rmClass(document.getElementById(‘start-menu’),‘open’);
-if(dWins[id]){d_front(id);return;}
-var def=D_DEFS[id]; if(!def)return;
-var n=0; for(var k in dWins)if(dWins.hasOwnProperty(k))n++;
-var win=document.createElement(‘div’); win.className=‘xp-window’; win.id=‘dw-’+id;
-win.style.cssText=‘left:’+(60+n*24)+‘px;top:’+(40+n*20)+‘px;width:’+def.w+‘px;height:’+def.h+‘px;z-index:’+(++dZ);
-var ctrl=’<div class="win-controls">’;
-if(!def.dialog)ctrl+=’<div class="win-btn win-btn-min" onclick="d_close(\''+id+'\')">_</div><div class="win-btn win-btn-max">\u25A1</div>’;
-ctrl+=’<div class="win-btn win-btn-close" onclick="d_close(\''+id+'\')">\u2715</div></div>’;
-var menu=!def.dialog?’<div class="xp-menubar"><div class="xp-menu-item">File</div><div class="xp-menu-item">Edit</div><div class="xp-menu-item">View</div><div class="xp-menu-item">Help</div></div>’:’’;
-var tb=def.tb?’<div class="xp-toolbar"><button class="tb-btn">\u2B05</button><button class="tb-btn">\u27A1</button><input class="xp-address" value="'+def.title+'" readonly></div>’:’’;
-var status=!def.dialog?’<div class="xp-statusbar">Ready</div>’:’’;
-var bg=def.dialog?‘background:#ece9d8’:’’;
-win.innerHTML=’<div class="xp-titlebar"><span class="win-icon">’+def.icon+’</span><span class="win-title">’+def.title+’</span>’+ctrl+’</div>’+menu+tb+’<div class="xp-content" style="'+bg+'">’+buildContent(id)+’</div>’+status;
-document.getElementById(‘windows-container’).appendChild(win);
-dWins[id]=win;
-d_makeDraggable(win,win.querySelector(’.xp-titlebar’));
-var btn=document.createElement(‘div’); btn.className=‘taskbar-app active’; btn.id=‘dtb-’+id;
-var st=def.title.length>16?def.title.substring(0,16)+’\u2026’:def.title;
-btn.innerHTML=def.icon+’ ‘+st; btn.onclick=function(){d_front(id);};
-document.getElementById(‘taskbar-apps’).appendChild(btn);
-if(id===‘error’)setTimeout(function(){d_clippy_show(‘error’);},600);
+  dStartOpen=false; rmClass(document.getElementById('start-menu'),'open');
+  if(dWins[id]){d_front(id);return;}
+  var def=D_DEFS[id]; if(!def)return;
+  var n=0; for(var k in dWins)if(dWins.hasOwnProperty(k))n++;
+  var win=document.createElement('div'); win.className='xp-window'; win.id='dw-'+id;
+  win.style.cssText='left:'+(60+n*24)+'px;top:'+(40+n*20)+'px;width:'+def.w+'px;height:'+def.h+'px;z-index:'+(++dZ);
+  var ctrl='<div class="win-controls">';
+  if(!def.dialog)ctrl+='<div class="win-btn win-btn-min" onclick="d_close(\''+id+'\')">_</div><div class="win-btn win-btn-max">\u25A1</div>';
+  ctrl+='<div class="win-btn win-btn-close" onclick="d_close(\''+id+'\')">\u2715</div></div>';
+  var menu=!def.dialog?'<div class="xp-menubar"><div class="xp-menu-item">File</div><div class="xp-menu-item">Edit</div><div class="xp-menu-item">View</div><div class="xp-menu-item">Help</div></div>':'';
+  var tb=def.tb?'<div class="xp-toolbar"><button class="tb-btn">\u2B05</button><button class="tb-btn">\u27A1</button><input class="xp-address" value="'+def.title+'" readonly></div>':'';
+  var status=!def.dialog?'<div class="xp-statusbar">Ready</div>':'';
+  var bg=def.dialog?'background:#ece9d8':'';
+  win.innerHTML='<div class="xp-titlebar"><span class="win-icon">'+def.icon+'</span><span class="win-title">'+def.title+'</span>'+ctrl+'</div>'+menu+tb+'<div class="xp-content" style="'+bg+'">'+buildContent(id)+'</div>'+status;
+  document.getElementById('windows-container').appendChild(win);
+  dWins[id]=win;
+  d_makeDraggable(win,win.querySelector('.xp-titlebar'));
+  var btn=document.createElement('div'); btn.className='taskbar-app active'; btn.id='dtb-'+id;
+  var st=def.title.length>16?def.title.substring(0,16)+'\u2026':def.title;
+  btn.innerHTML=def.icon+' '+st; btn.onclick=function(){d_front(id);};
+  document.getElementById('taskbar-apps').appendChild(btn);
+  if(id==='error')setTimeout(function(){d_clippy_show('error');},600);
 }
 function d_close(id){
-var w=document.getElementById(‘dw-’+id); if(w&&w.parentNode)w.parentNode.removeChild(w);
-var b=document.getElementById(‘dtb-’+id); if(b&&b.parentNode)b.parentNode.removeChild(b);
-delete dWins[id];
+  var w=document.getElementById('dw-'+id); if(w&&w.parentNode)w.parentNode.removeChild(w);
+  var b=document.getElementById('dtb-'+id); if(b&&b.parentNode)b.parentNode.removeChild(b);
+  delete dWins[id];
 }
 function d_front(id){
-var w=document.getElementById(‘dw-’+id); if(w)w.style.zIndex=++dZ;
-var apps=document.querySelectorAll(’.taskbar-app’);
-for(var i=0;i<apps.length;i++) rmClass(apps[i],‘active’);
-var b=document.getElementById(‘dtb-’+id); if(b) addClass(b,‘active’);
+  var w=document.getElementById('dw-'+id); if(w)w.style.zIndex=++dZ;
+  var apps=document.querySelectorAll('.taskbar-app');
+  for(var i=0;i<apps.length;i++) rmClass(apps[i],'active');
+  var b=document.getElementById('dtb-'+id); if(b) addClass(b,'active');
 }
 function d_makeDraggable(el,handle){
-function start(cx,cy){
-var ox=cx-el.offsetLeft,oy=cy-el.offsetTop;
-function mv(e){var x=e.touches?e.touches[0].clientX:e.clientX,y=e.touches?e.touches[0].clientY:e.clientY;el.style.left=Math.max(0,x-ox)+‘px’;el.style.top=Math.max(0,y-oy)+‘px’;}
-function up(){document.removeEventListener(‘mousemove’,mv);document.removeEventListener(‘mouseup’,up);document.removeEventListener(‘touchmove’,mv);document.removeEventListener(‘touchend’,up);}
-document.addEventListener(‘mousemove’,mv);document.addEventListener(‘mouseup’,up);
-document.addEventListener(‘touchmove’,mv,{passive:false});document.addEventListener(‘touchend’,up);
+  function start(cx,cy){
+    var ox=cx-el.offsetLeft,oy=cy-el.offsetTop;
+    function mv(e){var x=e.touches?e.touches[0].clientX:e.clientX,y=e.touches?e.touches[0].clientY:e.clientY;el.style.left=Math.max(0,x-ox)+'px';el.style.top=Math.max(0,y-oy)+'px';}
+    function up(){document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);document.removeEventListener('touchmove',mv);document.removeEventListener('touchend',up);}
+    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+    document.addEventListener('touchmove',mv,{passive:false});document.addEventListener('touchend',up);
+  }
+  handle.addEventListener('mousedown',function(e){d_front(el.id.replace('dw-',''));start(e.clientX,e.clientY);e.preventDefault();});
+  handle.addEventListener('touchstart',function(e){d_front(el.id.replace('dw-',''));start(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();},{passive:false});
 }
-handle.addEventListener(‘mousedown’,function(e){d_front(el.id.replace(‘dw-’,’’));start(e.clientX,e.clientY);e.preventDefault();});
-handle.addEventListener(‘touchstart’,function(e){d_front(el.id.replace(‘dw-’,’’));start(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault();},{passive:false});
-}
-function d_start_toggle(){dStartOpen=!dStartOpen;var sm=document.getElementById(‘start-menu’);if(dStartOpen)addClass(sm,‘open’);else rmClass(sm,‘open’);}
+function d_start_toggle(){dStartOpen=!dStartOpen;var sm=document.getElementById('start-menu');if(dStartOpen)addClass(sm,'open');else rmClass(sm,'open');}
 function d_shutdown(){for(var k in dWins)if(dWins.hasOwnProperty(k))d_close(k);}
-document.addEventListener(‘click’,function(e){
-if(dStartOpen&&!e.target.closest(’#start-menu’)&&!e.target.closest(’#start-btn’)){dStartOpen=false;rmClass(document.getElementById(‘start-menu’),‘open’);}
+document.addEventListener('click',function(e){
+  if(dStartOpen&&!e.target.closest('#start-menu')&&!e.target.closest('#start-btn')){dStartOpen=false;rmClass(document.getElementById('start-menu'),'open');}
 });
 
 // DESKTOP CLIPPY
-var D_LINES={‘default’:“It looks like you are trying to use a computer. Would you like help?”,‘error’:“It looks like your computer has a fatal virus. Would you like me to write a letter about it?”,‘recycle’:“Those files are gone <b>forever</b>. I hope you meant to do that.”,‘start’:“It looks like you opened the Start menu. Exciting times.”,‘yes’:“Great! Unfortunately I have no idea how to help. But I am here for you! “+E.happy,‘no’:“Fine. I will just be right here. <i>Watching.</i>”,‘dismiss’:“Fine. But you will be back. <i>They always come back.</i>”};
+var D_LINES={'default':"It looks like you are trying to use a computer. Would you like help?",'error':"It looks like your computer has a fatal virus. Would you like me to write a letter about it?",'recycle':"Those files are gone <b>forever</b>. I hope you meant to do that.",'start':"It looks like you opened the Start menu. Exciting times.",'yes':"Great! Unfortunately I have no idea how to help. But I am here for you! "+E.happy,'no':"Fine. I will just be right here. <i>Watching.</i>",'dismiss':"Fine. But you will be back. <i>They always come back.</i>"};
 var dClippyOn=false;
-function d_clippy_toggle(){dClippyOn=!dClippyOn;var el=document.getElementById(‘d-clippy-bubble’);if(dClippyOn)addClass(el,‘show’);else rmClass(el,‘show’);}
-function d_clippy_show(k){document.getElementById(‘d-clippy-text’).innerHTML=D_LINES[k]||D_LINES[‘default’];addClass(document.getElementById(‘d-clippy-bubble’),‘show’);dClippyOn=true;}
-function d_clippy_say(k){document.getElementById(‘d-clippy-text’).innerHTML=D_LINES[k];if(k===‘dismiss’)setTimeout(function(){rmClass(document.getElementById(‘d-clippy-bubble’),‘show’);dClippyOn=false;},2000);}
-if(!IS_MOBILE){setTimeout(function(){d_clippy_show(‘default’);d_open(‘explorer’);},400);}
+function d_clippy_toggle(){dClippyOn=!dClippyOn;var el=document.getElementById('d-clippy-bubble');if(dClippyOn)addClass(el,'show');else rmClass(el,'show');}
+function d_clippy_show(k){document.getElementById('d-clippy-text').innerHTML=D_LINES[k]||D_LINES['default'];addClass(document.getElementById('d-clippy-bubble'),'show');dClippyOn=true;}
+function d_clippy_say(k){document.getElementById('d-clippy-text').innerHTML=D_LINES[k];if(k==='dismiss')setTimeout(function(){rmClass(document.getElementById('d-clippy-bubble'),'show');dClippyOn=false;},2000);}
+if(!IS_MOBILE){setTimeout(function(){d_clippy_show('default');d_open('explorer');},400);}
 
 // MOBILE SHEET
 function m_open(id){
-var ICONS={explorer:E.folder,computer:E.pc,recycle:E.trash,notepad:E.note,ie:E.globe,error:E.stop,msw:E.bomb};
-var TITLES={explorer:‘My Documents’,computer:‘My Computer’,recycle:‘Recycle Bin’,notepad:‘Notepad’,ie:‘Internet Explorer’,error:‘Fatal Error’,msw:‘Minesweeper’};
-document.getElementById(‘mob-sh-icon’).textContent=ICONS[id]||E.folder;
-document.getElementById(‘mob-sh-title’).textContent=TITLES[id]||id;
-document.getElementById(‘mob-sheet-body’).innerHTML=buildContent(id);
-addClass(document.getElementById(‘mob-sheet’),‘open’);
-m_clippy_hide();
-if(id===‘msw’)mswInit();
-if(id===‘error’)setTimeout(m_clippy_show,700);
+  var ICONS={explorer:E.folder,computer:E.pc,recycle:E.trash,notepad:E.note,ie:E.globe,error:E.stop,msw:E.bomb};
+  var TITLES={explorer:'My Documents',computer:'My Computer',recycle:'Recycle Bin',notepad:'Notepad',ie:'Internet Explorer',error:'Fatal Error',msw:'Minesweeper'};
+  document.getElementById('mob-sh-icon').textContent=ICONS[id]||E.folder;
+  document.getElementById('mob-sh-title').textContent=TITLES[id]||id;
+  document.getElementById('mob-sheet-body').innerHTML=buildContent(id);
+  addClass(document.getElementById('mob-sheet'),'open');
+  m_clippy_hide();
+  if(id==='msw')mswInit();
+  if(id==='error')setTimeout(m_clippy_show,700);
 }
-function m_close(){rmClass(document.getElementById(‘mob-sheet’),‘open’);}
+function m_close(){rmClass(document.getElementById('mob-sheet'),'open');}
 var _sy=0;
-document.getElementById(‘mob-sheet’).addEventListener(‘touchstart’,function(e){_sy=e.touches[0].clientY;},{passive:true});
-document.getElementById(‘mob-sheet’).addEventListener(‘touchend’,function(e){if(e.changedTouches[0].clientY-_sy>90)m_close();},{passive:true});
+document.getElementById('mob-sheet').addEventListener('touchstart',function(e){_sy=e.touches[0].clientY;},{passive:true});
+document.getElementById('mob-sheet').addEventListener('touchend',function(e){if(e.changedTouches[0].clientY-_sy>90)m_close();},{passive:true});
 
 // MOBILE CLIPPY
-var M_LINES=[“It looks like you are using a phone to pretend it is 2001. Interesting choice.”,“It looks like you tapped me. That is exactly what I wanted.”,“It looks like you are bored. Let me tell you about pivot tables.”,“Would you like to write a letter? I can help you write a letter.”,“It looks like you are still here. So am I. <i>Always.</i>”,“It looks like you have not found the virus yet. It is in there somewhere.”];
+var M_LINES=["It looks like you are using a phone to pretend it is 2001. Interesting choice.","It looks like you tapped me. That is exactly what I wanted.","It looks like you are bored. Let me tell you about pivot tables.","Would you like to write a letter? I can help you write a letter.","It looks like you are still here. So am I. <i>Always.</i>","It looks like you have not found the virus yet. It is in there somewhere."];
 var mCI=0,mClippyOn=false;
-function m_clippy_say(t){document.getElementById(‘mob-clippy-text’).innerHTML=t;addClass(document.getElementById(‘mob-clippy-bubble’),‘show’);mClippyOn=true;}
+function m_clippy_say(t){document.getElementById('mob-clippy-text').innerHTML=t;addClass(document.getElementById('mob-clippy-bubble'),'show');mClippyOn=true;}
 function m_clippy_show(){m_clippy_say(M_LINES[mCI%M_LINES.length]);mCI++;}
-function m_clippy_hide(){rmClass(document.getElementById(‘mob-clippy-bubble’),‘show’);mClippyOn=false;}
+function m_clippy_hide(){rmClass(document.getElementById('mob-clippy-bubble'),'show');mClippyOn=false;}
 function m_clippy_toggle(){mClippyOn?m_clippy_hide():m_clippy_show();}
-function m_clippy_reply(r){r===‘yes’?m_clippy_say(“Great! Unfortunately I have no idea how to help. “+E.happy):m_clippy_say(“Fine. I will be right here. <i>Watching.</i>”);}
+function m_clippy_reply(r){r==='yes'?m_clippy_say("Great! Unfortunately I have no idea how to help. "+E.happy):m_clippy_say("Fine. I will be right here. <i>Watching.</i>");}
 if(IS_MOBILE)setTimeout(m_clippy_show,1500);
 </script>
-
 </body>
 </html>
